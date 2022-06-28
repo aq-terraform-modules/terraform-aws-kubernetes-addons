@@ -130,4 +130,8 @@ resource "helm_release" "jenkins" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.ingress_nginx
+  ]
 }
