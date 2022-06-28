@@ -37,7 +37,7 @@ resource "helm_release" "ingress_nginx" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = try(var.aws_lb_controller_context, {})
+    for_each = try(var.ingress_nginx_context, {})
 
     content {
       name  = each_item.key
@@ -63,7 +63,7 @@ resource "helm_release" "cert_manager" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = try(var.aws_cert_manager_context, {})
+    for_each = try(var.cert_manager_context, {})
 
     content {
       name  = each_item.key
@@ -97,7 +97,7 @@ resource "helm_release" "external_dns" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = try(var.aws_cert_manager_context, {})
+    for_each = try(var.external_dns_context, {})
 
     content {
       name  = each_item.key
@@ -123,7 +123,7 @@ resource "helm_release" "jenkins" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = try(var.aws_cert_manager_context, {})
+    for_each = try(var.jenkins_context, {})
 
     content {
       name  = each_item.key
