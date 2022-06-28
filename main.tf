@@ -130,8 +130,4 @@ resource "helm_release" "jenkins" {
       value = each_item.value
     }
   }
-
-  depends_on = [
-    module.eks
-  ]
 }
