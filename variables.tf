@@ -15,7 +15,7 @@ variable "enable_ingress_nginx" {
   default     = false
 }
 
-variable "aws_ingress_nginx_context" {
+variable "ingress_nginx_context" {
   description = "Set option for Ingress Nginx"
   default     = {}
 }
@@ -26,7 +26,7 @@ variable "enable_cert_manager" {
   default     = false
 }
 
-variable "aws_cert_manager_context" {
+variable "cert_manager_context" {
   description = "Set option for Cert Manager"
   default     = {}
 }
@@ -37,7 +37,7 @@ variable "enable_external_dns" {
   default     = false
 }
 
-variable "aws_external_dns_context" {
+variable "external_dns_context" {
   description = "Set option for External DNS"
   default     = {}
 }
@@ -48,7 +48,7 @@ variable "enable_jenkins" {
   default     = false
 }
 
-variable "aws_jenkins_context" {
+variable "jenkins_context" {
   description = "Set option for Jenkins"
   default     = {}
 }
