@@ -1,4 +1,47 @@
 ###########################################################
+# EXTERNAL SNAPSHOTTER
+###########################################################
+data "http" "volumesnapshotclasses" {
+  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
+}
+data "http" "volumesnapshotcontents" {
+  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml"
+}
+data "http" "volumesnapshots" {
+  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml"
+}
+data "http" "rbac_snapshot_controller" {
+  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml"
+}
+data "http" "setup_snapshot_controller" {
+  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml"
+}
+
+resource "kubectl_manifest" "volumesnapshotclasses" {
+  yaml_body = data.volumesnapshotclasses.body
+}
+resource "kubectl_manifest" "volumesnapshotcontents" {
+  yaml_body = data.volumesnapshotcontents.body
+}
+resource "kubectl_manifest" "volumesnapshots" {
+  yaml_body = data.volumesnapshots.body
+}
+resource "kubectl_manifest" "rbac_snapshot_controller" {
+  yaml_body = data.rbac_snapshot_controller.body
+}
+resource "kubectl_manifest" "setup_snapshot_controller" {
+  yaml_body = data.setup_snapshot_controller.body
+}
+
+resource "kubectl_manifest" "ebs_storageclass" {
+  yaml_body = file("${path.module}/ebs-csi-driver/storageclass.yaml")
+}
+
+resource "kubectl_manifest" "snapshotclass" {
+  yaml_body = file("${path.module}/ebs-csi-driver/snapshotclass.yaml")
+}
+
+###########################################################
 # LOAD BALANCER CONTROLLER
 ###########################################################
 resource "helm_release" "aws_loadbalancer_controller" {
@@ -133,5 +176,13 @@ resource "helm_release" "jenkins" {
 
   depends_on = [
     helm_release.ingress_nginx
+  ]
+}
+
+resource "kubectl_manifest" "jenkins_snapshot" {
+  yaml_body = file("${path.module}/jenkins/snapshot.yaml")
+
+  depends_on = [
+    helm_release.jenkins
   ]
 }

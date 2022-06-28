@@ -1,0 +1,9 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: jenkins-snapshot
+  namespace: jenkins
+spec:
+  volumeSnapshotClassName: csi-aws-vsc
+  source:
+    persistentVolumeClaimName: jenkins
