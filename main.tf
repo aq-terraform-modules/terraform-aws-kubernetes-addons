@@ -18,19 +18,19 @@ data "http" "setup_snapshot_controller" {
 }
 
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  yaml_body = data.volumesnapshotclasses.body
+  yaml_body = data.http.volumesnapshotclasses.body
 }
 resource "kubectl_manifest" "volumesnapshotcontents" {
-  yaml_body = data.volumesnapshotcontents.body
+  yaml_body = data.http.volumesnapshotcontents.body
 }
 resource "kubectl_manifest" "volumesnapshots" {
-  yaml_body = data.volumesnapshots.body
+  yaml_body = data.http.volumesnapshots.body
 }
 resource "kubectl_manifest" "rbac_snapshot_controller" {
-  yaml_body = data.rbac_snapshot_controller.body
+  yaml_body = data.http.rbac_snapshot_controller.body
 }
 resource "kubectl_manifest" "setup_snapshot_controller" {
-  yaml_body = data.setup_snapshot_controller.body
+  yaml_body = data.http.setup_snapshot_controller.body
 }
 
 resource "kubectl_manifest" "ebs_storageclass" {
