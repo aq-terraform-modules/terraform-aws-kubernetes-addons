@@ -40,13 +40,13 @@ resource "aws_iam_role_policy_attachment" "csi_ebs" {
 # AWS LoadBalancer Controller IAM Role
 ###########################################################
 resource "aws_iam_policy" "aws_loadbalancer_controller" {
-  count  = length(helm_release.aws_loadbalancer_controller)
+  count  = var.enable_aws_lb_controller ? 1 : 0
   name   = "AWSLoadBalancerControllerIAMPolicy"
   policy = file("${path.module}/aws-loadbalancer-controller/policy.json")
 }
 
 resource "aws_iam_role" "aws_loadbalancer_controller" {
-  count  = length(helm_release.aws_loadbalancer_controller)
+  count  = var.enable_aws_lb_controller ? 1 : 0
   name = "AWSLoadBalancerControllerIAMRole"
 
   # Terraform's "jsonencode" function converts a
@@ -72,7 +72,7 @@ resource "aws_iam_role" "aws_loadbalancer_controller" {
 }
 
 resource "aws_iam_role_policy_attachment" "aws_loadbalancer_controller" {
-  count  = length(helm_release.aws_loadbalancer_controller)
+  count  = var.enable_aws_lb_controller ? 1 : 0
   role       = aws_iam_role.aws_loadbalancer_controller.name
   policy_arn = aws_iam_policy.aws_loadbalancer_controller.arn
 }

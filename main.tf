@@ -52,6 +52,11 @@ resource "helm_release" "aws_loadbalancer_controller" {
   repository       = "https://aws.github.io/eks-charts"
   chart            = "aws-load-balancer-controller"
 
+  set {
+    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.aws_loadbalancer_controller.arn
+  }
+
   dynamic "set" {
     iterator = each_item
     for_each = try(var.aws_lb_controller_context, {})
@@ -137,6 +142,11 @@ resource "helm_release" "external_dns" {
   values = [
     file("${path.module}/external-dns/values-custom.yaml")
   ]
+
+  set {
+    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.external_dns.arn
+  }
 
   dynamic "set" {
     iterator = each_item
