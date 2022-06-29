@@ -7,8 +7,8 @@ data "kubectl_file_documents" "volumesnapshotclasses" {
   content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  for_each  = data.kubectl_file_documents.volumesnapshotclasses.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.volumesnapshotclasses.documents)
+  yaml_body = element(data.kubectl_file_documents.volumesnapshotclasses.documents, count.index)
 
   depends_on = [
     data.kubectl_file_documents.volumesnapshotclasses
