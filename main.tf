@@ -10,8 +10,8 @@ data "kubectl_file_documents" "volumesnapshotclasses" {
   content = data.http.volumesnapshotclasses.body
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  for_each  = data.kubectl_file_documents.volumesnapshotclasses.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.volumesnapshotclasses.documents)
+  yaml_body = element(data.kubectl_file_documents.volumesnapshotclasses.documents, count.index)
 }
 
 ### Volume Snapshot Contents
@@ -22,8 +22,8 @@ data "kubectl_file_documents" "volumesnapshotcontents" {
   content = data.http.volumesnapshotcontents.body
 }
 resource "kubectl_manifest" "volumesnapshotcontents" {
-  for_each  = data.kubectl_file_documents.volumesnapshotcontents.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.volumesnapshotcontents.documents)
+  yaml_body = element(data.kubectl_file_documents.volumesnapshotcontents.documents, count.index)
 
   depends_on = [
     kubectl_manifest.volumesnapshotclasses
@@ -38,8 +38,8 @@ data "kubectl_file_documents" "volumesnapshots" {
   content = data.http.volumesnapshots.body
 }
 resource "kubectl_manifest" "volumesnapshots" {
-  for_each  = data.kubectl_file_documents.volumesnapshots.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.volumesnapshots.documents)
+  yaml_body = element(data.kubectl_file_documents.volumesnapshots.documents, count.index)
 
   depends_on = [
     kubectl_manifest.volumesnapshotcontents
@@ -54,8 +54,8 @@ data "kubectl_file_documents" "rbac_snapshot_controller" {
   content = data.http.rbac_snapshot_controller.body
 }
 resource "kubectl_manifest" "rbac_snapshot_controller" {
-  for_each  = data.kubectl_file_documents.rbac_snapshot_controller.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.rbac_snapshot_controller.documents)
+  yaml_body = element(data.kubectl_file_documents.rbac_snapshot_controller.documents, count.index)
 
   depends_on = [
     kubectl_manifest.volumesnapshots
@@ -70,8 +70,8 @@ data "kubectl_file_documents" "setup_snapshot_controller" {
   content = data.http.setup_snapshot_controller.body
 }
 resource "kubectl_manifest" "setup_snapshot_controller" {
-  for_each  = data.kubectl_file_documents.setup_snapshot_controller.manifests
-  yaml_body = each.value
+  count     = length(data.kubectl_file_documents.setup_snapshot_controller.documents)
+  yaml_body = element(data.kubectl_file_documents.setup_snapshot_controller.documents, count.index)
 
   depends_on = [
     kubectl_manifest.rbac_snapshot_controller
