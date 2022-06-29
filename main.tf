@@ -3,12 +3,12 @@
 ###########################################################
 
 ### Volume Snapshot Class
-data "kubectl_file_documents" "volumesnapshotclasses" {
-  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
+data "kubectl_path_documents" "volumesnapshotclasses" {
+  pattern = "${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  count     = length(data.kubectl_file_documents.volumesnapshotclasses.documents)
-  yaml_body = element(data.kubectl_file_documents.volumesnapshotclasses.documents, count.index)
+  count     = length(data.kubectl_path_documents.volumesnapshotclasses.documents)
+  yaml_body = element(data.kubectl_path_documents.volumesnapshotclasses.documents, count.index)
 
   depends_on = [
     data.kubectl_file_documents.volumesnapshotclasses
