@@ -24,6 +24,10 @@ data "kubectl_file_documents" "volumesnapshotcontents" {
 resource "kubectl_manifest" "volumesnapshotcontents" {
   for_each  = data.kubectl_file_documents.volumesnapshotcontents.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.volumesnapshotclasses
+  ]
 }
 
 ### Volume Snapshot
@@ -36,6 +40,10 @@ data "kubectl_file_documents" "volumesnapshots" {
 resource "kubectl_manifest" "volumesnapshots" {
   for_each  = data.kubectl_file_documents.volumesnapshots.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.volumesnapshotcontents
+  ]
 }
 
 ### RBAC for Snapshot Controller
@@ -48,6 +56,10 @@ data "kubectl_file_documents" "rbac_snapshot_controller" {
 resource "kubectl_manifest" "rbac_snapshot_controller" {
   for_each  = data.kubectl_file_documents.rbac_snapshot_controller.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.volumesnapshots
+  ]
 }
 
 ### Snapshot Controller
@@ -60,6 +72,10 @@ data "kubectl_file_documents" "setup_snapshot_controller" {
 resource "kubectl_manifest" "setup_snapshot_controller" {
   for_each  = data.kubectl_file_documents.setup_snapshot_controller.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.rbac_snapshot_controller
+  ]
 }
 
 ### Storage Class
@@ -69,6 +85,10 @@ data "kubectl_file_documents" "ebs_storageclass" {
 resource "kubectl_manifest" "ebs_storageclass" {
   for_each  = data.kubectl_file_documents.ebs_storageclass.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.setup_snapshot_controller
+  ]
 }
 
 ### Snapshot Storage Class
@@ -78,6 +98,10 @@ data "kubectl_file_documents" "snapshotclass" {
 resource "kubectl_manifest" "snapshotclass" {
   for_each  = data.kubectl_file_documents.snapshotclass.manifests
   yaml_body = each.value
+
+  depends_on = [
+    kubectl_manifest.setup_snapshot_controller
+  ]
 }
 
 ###########################################################
@@ -228,10 +252,15 @@ resource "helm_release" "jenkins" {
   ]
 }
 
+data "kubectl_file_documents" "jenkins_snapshot" {
+  content = file("${path.module}/jenkins/snapshot.yaml")
+}
 resource "kubectl_manifest" "jenkins_snapshot" {
-  yaml_body = file("${path.module}/jenkins/snapshot.yaml")
+  for_each  = data.kubectl_file_documents.jenkins_snapshot.manifests
+  yaml_body = each.value
 
   depends_on = [
-    helm_release.jenkins
+    helm_release.jenkins,
+    kubectl_manifest.snapshotclass
   ]
 }
