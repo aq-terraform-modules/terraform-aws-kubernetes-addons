@@ -81,13 +81,13 @@ resource "aws_iam_role_policy_attachment" "aws_loadbalancer_controller" {
 # External DNS IAM Role
 ###########################################################
 resource "aws_iam_policy" "external_dns" {
-  count  = length(helm_release.external_dns)
+  count  = var.enable_external_dns ? 1 : 0
   name   = "ExternalDNSIAMPolicy"
   policy = file("${path.module}/external-dns/policy.json")
 }
 
 resource "aws_iam_role" "external_dns" {
-  count  = length(helm_release.external_dns)
+  count  = var.enable_external_dns ? 1 : 0
   name = "ExternalDNSIAMRole"
 
   # Terraform's "jsonencode" function converts a
@@ -113,7 +113,7 @@ resource "aws_iam_role" "external_dns" {
 }
 
 resource "aws_iam_role_policy_attachment" "external_dns" {
-  count  = length(helm_release.external_dns)
+  count  = var.enable_external_dns ? 1 : 0
   role       = aws_iam_role.external_dns.name
   policy_arn = aws_iam_policy.external_dns.arn
 }
