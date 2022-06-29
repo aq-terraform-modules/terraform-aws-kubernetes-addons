@@ -6,11 +6,11 @@
 data "http" "volumesnapshotclasses" {
   url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
 }
-data "kubectl_path_documents" "volumesnapshotclasses" {
-  pattern = data.http.volumesnapshotclasses.body
+data "kubectl_file_documents" "volumesnapshotclasses" {
+  content = data.http.volumesnapshotclasses.body
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  for_each  = toset(data.kubectl_path_documents.volumesnapshotclasses.documents)
+  for_each  = data.kubectl_file_documents.volumesnapshotclasses.manifests
   yaml_body = each.value
 }
 
@@ -18,11 +18,11 @@ resource "kubectl_manifest" "volumesnapshotclasses" {
 data "http" "volumesnapshotcontents" {
   url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml"
 }
-data "kubectl_path_documents" "volumesnapshotcontents" {
-  pattern = data.http.volumesnapshotcontents.body
+data "kubectl_file_documents" "volumesnapshotcontents" {
+  content = data.http.volumesnapshotcontents.body
 }
 resource "kubectl_manifest" "volumesnapshotcontents" {
-  for_each  = toset(data.kubectl_path_documents.volumesnapshotcontents.documents)
+  for_each  = data.kubectl_file_documents.volumesnapshotcontents.manifests
   yaml_body = each.value
 }
 
@@ -30,11 +30,11 @@ resource "kubectl_manifest" "volumesnapshotcontents" {
 data "http" "volumesnapshots" {
   url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml"
 }
-data "kubectl_path_documents" "volumesnapshots" {
-  pattern = data.http.volumesnapshots.body
+data "kubectl_file_documents" "volumesnapshots" {
+  content = data.http.volumesnapshots.body
 }
 resource "kubectl_manifest" "volumesnapshots" {
-  for_each  = toset(data.kubectl_path_documents.volumesnapshots.documents)
+  for_each  = data.kubectl_file_documents.volumesnapshots.manifests
   yaml_body = each.value
 }
 
@@ -42,11 +42,11 @@ resource "kubectl_manifest" "volumesnapshots" {
 data "http" "rbac_snapshot_controller" {
   url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml"
 }
-data "kubectl_path_documents" "rbac_snapshot_controller" {
-  pattern = data.http.rbac_snapshot_controller.body
+data "kubectl_file_documents" "rbac_snapshot_controller" {
+  content = data.http.rbac_snapshot_controller.body
 }
 resource "kubectl_manifest" "rbac_snapshot_controller" {
-  for_each  = toset(data.kubectl_path_documents.rbac_snapshot_controller.documents)
+  for_each  = data.kubectl_file_documents.rbac_snapshot_controller.manifests
   yaml_body = each.value
 }
 
@@ -54,29 +54,29 @@ resource "kubectl_manifest" "rbac_snapshot_controller" {
 data "http" "setup_snapshot_controller" {
   url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml"
 }
-data "kubectl_path_documents" "setup_snapshot_controller" {
-  pattern = data.http.setup_snapshot_controller.body
+data "kubectl_file_documents" "setup_snapshot_controller" {
+  content = data.http.setup_snapshot_controller.body
 }
 resource "kubectl_manifest" "setup_snapshot_controller" {
-  for_each  = toset(data.kubectl_path_documents.setup_snapshot_controller.documents)
+  for_each  = data.kubectl_file_documents.setup_snapshot_controller.manifests
   yaml_body = each.value
 }
 
 ### Storage Class
-data "kubectl_path_documents" "ebs_storageclass" {
-  pattern = file("${path.module}/ebs-csi-driver/storageclass.yaml")
+data "kubectl_file_documents" "ebs_storageclass" {
+  content = file("${path.module}/ebs-csi-driver/storageclass.yaml")
 }
 resource "kubectl_manifest" "ebs_storageclass" {
-  for_each  = toset(data.kubectl_path_documents.ebs_storageclass.documents)
+  for_each  = data.kubectl_file_documents.ebs_storageclass.manifests
   yaml_body = each.value
 }
 
 ### Snapshot Storage Class
-data "kubectl_path_documents" "snapshotclass" {
-  pattern = file("${path.module}/ebs-csi-driver/snapshotclass.yaml")
+data "kubectl_file_documents" "snapshotclass" {
+  content = file("${path.module}/ebs-csi-driver/snapshotclass.yaml")
 }
 resource "kubectl_manifest" "snapshotclass" {
-  for_each  = toset(data.kubectl_path_documents.snapshotclass.documents)
+  for_each  = data.kubectl_file_documents.snapshotclass.manifests
   yaml_body = each.value
 }
 
