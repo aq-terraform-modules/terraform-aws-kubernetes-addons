@@ -9,6 +9,10 @@ data "kubectl_file_documents" "volumesnapshotclasses" {
 resource "kubectl_manifest" "volumesnapshotclasses" {
   for_each  = data.kubectl_file_documents.volumesnapshotclasses.manifests
   yaml_body = each.value
+
+  depends_on = [
+    data.kubectl_file_documents.volumesnapshotclasses
+  ]
 }
 
 ### Volume Snapshot Contents
