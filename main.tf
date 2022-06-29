@@ -3,27 +3,21 @@
 ###########################################################
 
 ### Volume Snapshot Class
-data "http" "volumesnapshotclasses" {
-  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
-}
 data "kubectl_file_documents" "volumesnapshotclasses" {
-  content = data.http.volumesnapshotclasses.body
+  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
-  count     = length(data.kubectl_file_documents.volumesnapshotclasses.documents)
-  yaml_body = element(data.kubectl_file_documents.volumesnapshotclasses.documents, count.index)
+  for_each  = data.kubectl_file_documents.volumesnapshotclasses.manifests
+  yaml_body = each.value
 }
 
 ### Volume Snapshot Contents
-data "http" "volumesnapshotcontents" {
-  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml"
-}
 data "kubectl_file_documents" "volumesnapshotcontents" {
-  content = data.http.volumesnapshotcontents.body
+  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotcontents.yaml")
 }
 resource "kubectl_manifest" "volumesnapshotcontents" {
-  count     = length(data.kubectl_file_documents.volumesnapshotcontents.documents)
-  yaml_body = element(data.kubectl_file_documents.volumesnapshotcontents.documents, count.index)
+  for_each  = data.kubectl_file_documents.volumesnapshotcontents.manifests
+  yaml_body = each.value
 
   depends_on = [
     kubectl_manifest.volumesnapshotclasses
@@ -31,15 +25,12 @@ resource "kubectl_manifest" "volumesnapshotcontents" {
 }
 
 ### Volume Snapshot
-data "http" "volumesnapshots" {
-  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml"
-}
 data "kubectl_file_documents" "volumesnapshots" {
-  content = data.http.volumesnapshots.body
+  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshots.yaml")
 }
 resource "kubectl_manifest" "volumesnapshots" {
-  count     = length(data.kubectl_file_documents.volumesnapshots.documents)
-  yaml_body = element(data.kubectl_file_documents.volumesnapshots.documents, count.index)
+  for_each  = data.kubectl_file_documents.volumesnapshots.manifests
+  yaml_body = each.value
 
   depends_on = [
     kubectl_manifest.volumesnapshotcontents
@@ -47,15 +38,12 @@ resource "kubectl_manifest" "volumesnapshots" {
 }
 
 ### RBAC for Snapshot Controller
-data "http" "rbac_snapshot_controller" {
-  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml"
-}
 data "kubectl_file_documents" "rbac_snapshot_controller" {
-  content = data.http.rbac_snapshot_controller.body
+  content = file("${path.module}/ebs-csi-driver/rbac-snapshot-controller.yaml")
 }
 resource "kubectl_manifest" "rbac_snapshot_controller" {
-  count     = length(data.kubectl_file_documents.rbac_snapshot_controller.documents)
-  yaml_body = element(data.kubectl_file_documents.rbac_snapshot_controller.documents, count.index)
+  for_each  = data.kubectl_file_documents.rbac_snapshot_controller.manifests
+  yaml_body = each.value
 
   depends_on = [
     kubectl_manifest.volumesnapshots
@@ -63,15 +51,12 @@ resource "kubectl_manifest" "rbac_snapshot_controller" {
 }
 
 ### Snapshot Controller
-data "http" "setup_snapshot_controller" {
-  url = "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml"
-}
 data "kubectl_file_documents" "setup_snapshot_controller" {
-  content = data.http.setup_snapshot_controller.body
+  content = file("${path.module}/ebs-csi-driver/setup-snapshot-controller.yaml")
 }
 resource "kubectl_manifest" "setup_snapshot_controller" {
-  count     = length(data.kubectl_file_documents.setup_snapshot_controller.documents)
-  yaml_body = element(data.kubectl_file_documents.setup_snapshot_controller.documents, count.index)
+  for_each  = data.kubectl_file_documents.setup_snapshot_controller.manifests
+  yaml_body = each.value
 
   depends_on = [
     kubectl_manifest.rbac_snapshot_controller
