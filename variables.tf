@@ -52,3 +52,11 @@ variable "jenkins_context" {
   description = "Set option for Jenkins"
   default     = {}
 }
+
+variable "account_id" {
+  description = "Current AWS account ID to create IAM role"
+}
+
+variable "oidc_provider" {
+  description = "EKS OIDC provider to create IAM role"
+}
