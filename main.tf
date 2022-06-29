@@ -54,7 +54,7 @@ resource "helm_release" "aws_loadbalancer_controller" {
 
   set {
     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.aws_loadbalancer_controller[0].arn
+    value = aws_iam_role.aws_loadbalancer_controller[count.index].arn
   }
 
   dynamic "set" {
@@ -145,7 +145,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.external_dns[0].arn
+    value = aws_iam_role.external_dns[count.index].arn
   }
 
   dynamic "set" {
