@@ -4,13 +4,13 @@
 
 ### Volume Snapshot Class
 data "template_file" "volumesnapshotclasses" {
-  template = file("ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
+  template = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
 }
 data "kubectl_file_documents" "volumesnapshotclasses" {
   content = data.template_file.volumesnapshotclasses.rendered
 }
 data "kubectl_file_documents" "volumesnapshotclasses_hack" {
-  content = file("ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
+  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
 }
 resource "kubectl_manifest" "volumesnapshotclasses" {
   count     = length(data.kubectl_path_documents.volumesnapshotclasses_hack.documents)
