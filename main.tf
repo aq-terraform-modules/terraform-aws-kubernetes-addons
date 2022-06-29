@@ -11,7 +11,7 @@ resource "kubectl_manifest" "volumesnapshotclasses" {
   yaml_body = element(data.kubectl_path_documents.volumesnapshotclasses.documents, count.index)
 
   depends_on = [
-    data.kubectl_file_documents.volumesnapshotclasses
+    data.kubectl_path_documents.volumesnapshotclasses
   ]
 }
 
