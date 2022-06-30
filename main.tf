@@ -2,7 +2,7 @@
 # EXTERNAL SNAPSHOTTER
 ###########################################################
 data "kustomization_build" "ebs_csi" {
-  path = "${path.module}/ebs-csi-driver"
+  path = ".terraform/modules/kubernetes_addons/ebs-csi-driver"
 }
 resource "kustomization_resource" "ebs_csi" {
   for_each = data.kustomization_build.ebs_csi.ids
