@@ -1,103 +1,13 @@
 ###########################################################
 # EXTERNAL SNAPSHOTTER
 ###########################################################
+data "kustomization_build" "ebs_csi" {
+  path = "${path.module}/ebs-csi-driver"
+}
+resource "kustomization_resource" "ebs_csi" {
+  for_each = data.kustomization_build.current.ids
 
-### Volume Snapshot Class
-data "template_file" "volumesnapshotclasses" {
-  template = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
-}
-data "kubectl_file_documents" "volumesnapshotclasses" {
-  content = data.template_file.volumesnapshotclasses.rendered
-}
-data "kubectl_file_documents" "volumesnapshotclasses_hack" {
-  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotclasses.yaml")
-}
-resource "kubectl_manifest" "volumesnapshotclasses" {
-  count     = length(data.kubectl_file_documents.volumesnapshotclasses_hack.documents)
-  yaml_body = element(data.kubectl_file_documents.volumesnapshotclasses.documents, count.index)
-  wait_for_rollout = false
-
-  depends_on = [
-    data.kubectl_file_documents.volumesnapshotclasses
-  ]
-}
-
-### Volume Snapshot Contents
-data "kubectl_file_documents" "volumesnapshotcontents" {
-  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshotcontents.yaml")
-}
-resource "kubectl_manifest" "volumesnapshotcontents" {
-  for_each  = data.kubectl_file_documents.volumesnapshotcontents.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.volumesnapshotclasses
-  ]
-}
-
-### Volume Snapshot
-data "kubectl_file_documents" "volumesnapshots" {
-  content = file("${path.module}/ebs-csi-driver/snapshot.storage.k8s.io_volumesnapshots.yaml")
-}
-resource "kubectl_manifest" "volumesnapshots" {
-  for_each  = data.kubectl_file_documents.volumesnapshots.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.volumesnapshotcontents
-  ]
-}
-
-### RBAC for Snapshot Controller
-data "kubectl_file_documents" "rbac_snapshot_controller" {
-  content = file("${path.module}/ebs-csi-driver/rbac-snapshot-controller.yaml")
-}
-resource "kubectl_manifest" "rbac_snapshot_controller" {
-  for_each  = data.kubectl_file_documents.rbac_snapshot_controller.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.volumesnapshots
-  ]
-}
-
-### Snapshot Controller
-data "kubectl_file_documents" "setup_snapshot_controller" {
-  content = file("${path.module}/ebs-csi-driver/setup-snapshot-controller.yaml")
-}
-resource "kubectl_manifest" "setup_snapshot_controller" {
-  for_each  = data.kubectl_file_documents.setup_snapshot_controller.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.rbac_snapshot_controller
-  ]
-}
-
-### Storage Class
-data "kubectl_file_documents" "ebs_storageclass" {
-  content = file("${path.module}/ebs-csi-driver/storageclass.yaml")
-}
-resource "kubectl_manifest" "ebs_storageclass" {
-  for_each  = data.kubectl_file_documents.ebs_storageclass.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.setup_snapshot_controller
-  ]
-}
-
-### Snapshot Storage Class
-data "kubectl_file_documents" "snapshotclass" {
-  content = file("${path.module}/ebs-csi-driver/snapshotclass.yaml")
-}
-resource "kubectl_manifest" "snapshotclass" {
-  for_each  = data.kubectl_file_documents.snapshotclass.manifests
-  yaml_body = each.value
-
-  depends_on = [
-    kubectl_manifest.setup_snapshot_controller
-  ]
+  manifest = data.kustomization_build.current.manifests[each.value]
 }
 
 ###########################################################
