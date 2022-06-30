@@ -155,6 +155,5 @@ resource "kubectl_manifest" "jenkins_snapshot" {
 
   depends_on = [
     helm_release.jenkins,
-    kustomization_resource.ebs_csi
   ]
 }
