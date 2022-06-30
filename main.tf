@@ -146,14 +146,10 @@ resource "helm_release" "jenkins" {
   ]
 }
 
-data "kubectl_file_documents" "jenkins_snapshot" {
-  content = file("${path.module}/jenkins/snapshot.yaml")
-}
 resource "kubectl_manifest" "jenkins_snapshot" {
-  for_each  = data.kubectl_file_documents.jenkins_snapshot.manifests
-  yaml_body = each.value
+  yaml_body = file("${path.module}/jenkins/snapshot.yaml")
 
   depends_on = [
-    helm_release.jenkins,
+    helm_release.jenkins
   ]
 }
