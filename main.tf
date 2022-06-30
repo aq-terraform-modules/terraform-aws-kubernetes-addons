@@ -5,9 +5,9 @@ data "kustomization_build" "ebs_csi" {
   path = "${path.module}/ebs-csi-driver"
 }
 resource "kustomization_resource" "ebs_csi" {
-  for_each = data.kustomization_build.current.ids
+  for_each = data.kustomization_build.ebs_csi.ids
 
-  manifest = data.kustomization_build.current.manifests[each.value]
+  manifest = data.kustomization_build.ebs_csi.manifests[each.value]
 }
 
 ###########################################################
@@ -167,6 +167,6 @@ resource "kubectl_manifest" "jenkins_snapshot" {
 
   depends_on = [
     helm_release.jenkins,
-    kubectl_manifest.snapshotclass
+    kustomization_resource.ebs_csi
   ]
 }
