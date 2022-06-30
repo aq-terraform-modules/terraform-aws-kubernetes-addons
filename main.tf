@@ -1,16 +1,4 @@
 ###########################################################
-# EXTERNAL SNAPSHOTTER
-###########################################################
-data "kustomization_build" "ebs_csi" {
-  path = ".terraform/modules/kubernetes_addons/ebs-csi-driver"
-}
-resource "kustomization_resource" "ebs_csi" {
-  for_each = data.kustomization_build.ebs_csi.ids
-
-  manifest = data.kustomization_build.ebs_csi.manifests[each.value]
-}
-
-###########################################################
 # LOAD BALANCER CONTROLLER
 ###########################################################
 resource "helm_release" "aws_loadbalancer_controller" {
