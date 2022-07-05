@@ -146,10 +146,10 @@ resource "helm_release" "jenkins" {
   ]
 }
 
-# resource "kubectl_manifest" "jenkins_snapshot" {
-#   yaml_body = file("${path.module}/jenkins/snapshot.yaml")
+resource "kubectl_manifest" "jenkins_snapshot" {
+  yaml_body = file("${path.module}/jenkins/snapshot.yaml")
 
-#   depends_on = [
-#     helm_release.jenkins
-#   ]
-# }
+  depends_on = [
+    helm_release.jenkins
+  ]
+}
