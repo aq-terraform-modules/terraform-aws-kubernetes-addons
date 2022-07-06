@@ -6,4 +6,4 @@ metadata:
 spec:
   volumeSnapshotClassName: csi-aws-vsc
   source:
-    persistentVolumeClaimName: jenkins
+    persistentVolumeClaimName: jenkins-home

@@ -146,10 +146,18 @@ resource "helm_release" "jenkins" {
   ]
 }
 
+resource "kubectl_manifest" "jenkins_home_pvc" {
+  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
+
+  depends_on = [
+    helm_release.jenkins
+  ]
+}
+
 resource "kubectl_manifest" "jenkins_snapshot" {
   yaml_body = file("${path.module}/jenkins/snapshot.yaml")
 
   depends_on = [
-    helm_release.jenkins
+    kubectl_manifest.jenkins_home_pvc
   ]
 }
