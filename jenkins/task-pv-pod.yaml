@@ -7,7 +7,7 @@ spec:
   volumes:
     - name: jenkins-home-restore
       persistentVolumeClaim:
-        claimName: jenkins-home-restore-2
+        claimName: jenkins-home-restore
   containers:
     - name: task-pv-container
       image: centos
