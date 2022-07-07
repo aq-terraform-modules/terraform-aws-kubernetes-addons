@@ -119,6 +119,10 @@ resource "helm_release" "external_dns" {
 ###########################################################
 # JENKINS
 ###########################################################
+resource "kubectl_manifest" "jenkins_home_pvc" {
+  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
+}
+
 resource "helm_release" "jenkins" {
   count            = var.enable_jenkins ? 1 : 0
   name             = "jenkins"
@@ -142,15 +146,8 @@ resource "helm_release" "jenkins" {
   }
 
   depends_on = [
-    helm_release.ingress_nginx
-  ]
-}
-
-resource "kubectl_manifest" "jenkins_home_pvc" {
-  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
-
-  depends_on = [
-    helm_release.jenkins
+    helm_release.ingress_nginx,
+    kubectl_manifest.jenkins_home_pvc
   ]
 }
 
