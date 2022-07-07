@@ -119,8 +119,21 @@ resource "helm_release" "external_dns" {
 ###########################################################
 # JENKINS
 ###########################################################
+resource "kubectl_manifest" "jenkins_namespace" {
+    yaml_body = <<YAML
+apiVersion: v1
+kind: namespace
+metadata:
+  name: jenkins
+YAML
+}
+
 resource "kubectl_manifest" "jenkins_home_pvc" {
   yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
+
+  depends_on = [
+    kubectl_manifest.jenkins_namespace
+  ]
 }
 
 resource "helm_release" "jenkins" {
