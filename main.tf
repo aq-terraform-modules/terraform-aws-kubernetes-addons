@@ -124,7 +124,7 @@ resource "kubectl_manifest" "jenkins_namespace" {
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: simple-nginx
+  name: jenkins
 YAML
 }
 
