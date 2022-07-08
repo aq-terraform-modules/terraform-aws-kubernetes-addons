@@ -15,6 +15,37 @@ resource "helm_release" "snapscheduler" {
 }
 
 ###########################################################
+# EFS CSI Driver
+###########################################################
+resource "helm_release" "efs_csi_driver" {
+  count            = var.enable_efs_csi_driver ? 1 : 0
+  name             = "aws-efs-csi-driver"
+  namespace        = "kube-system"
+  create_namespace = true
+  repository       = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
+  chart            = "aws-efs-csi-driver"
+
+  values = [
+    file("${path.module}/efs-csi-driver/values-custom.yaml")
+  ]
+
+  set {
+    name  = "node.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.efs_csi_driver[count.index].arn
+  }
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.efs_csi_driver_context1, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+}
+
+###########################################################
 # LOAD BALANCER CONTROLLER
 ###########################################################
 resource "helm_release" "aws_loadbalancer_controller" {

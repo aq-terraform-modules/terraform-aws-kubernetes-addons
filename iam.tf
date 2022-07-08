@@ -79,3 +79,44 @@ resource "aws_iam_role_policy_attachment" "external_dns" {
   role       = aws_iam_role.external_dns[count.index].name
   policy_arn = aws_iam_policy.external_dns[count.index].arn
 }
+
+###########################################################
+# EFS CSI Driver IAM Role
+###########################################################
+resource "aws_iam_policy" "efs_csi_driver" {
+  count  = var.enable_efs_csi_driver ? 1 : 0
+  name   = "EFSCSIDriverIAMPolicy"
+  policy = file("${path.module}/efs-csi-driver/policy.json")
+}
+
+resource "aws_iam_role" "efs_csi_driver" {
+  count = var.enable_efs_csi_driver ? 1 : 0
+  name  = "EFSCSIDriverIAMRole"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+        },
+        Action : "sts:AssumeRoleWithWebIdentity",
+        Condition : {
+          StringEquals : {
+            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
+            "${var.oidc_provider}:sub" : "system:serviceaccount:kube-system:efs-csi-controller-sa"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "efs_csi_driver" {
+  count      = var.enable_efs_csi_driver ? 1 : 0
+  role       = aws_iam_role.efs_csi_driver[count.index].name
+  policy_arn = aws_iam_policy.efs_csi_driver[count.index].arn
+}

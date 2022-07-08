@@ -4,6 +4,17 @@ variable "enable_snapscheduler" {
   default     = false
 }
 
+variable "enable_efs_csi_driver" {
+  description = "Enable EFS CSI Driver or not"
+  type        = bool
+  default     = false
+}
+
+variable "efs_csi_driver_context" {
+  description = "Set option for EFS CSI Driver"
+  default     = {}
+}
+
 variable "enable_aws_lb_controller" {
   description = "Enable AWS LB Controller or not"
   type        = bool
