@@ -75,6 +75,17 @@ variable "jenkins_context" {
   default     = {}
 }
 
+variable "enable_velero" {
+  description = "Enable Velero service or not"
+  type        = bool
+  default     = false
+}
+
+variable "velero_context" {
+  description = "Set option for Velero"
+  default     = {}
+}
+
 variable "account_id" {
   description = "Current AWS account ID to create IAM role"
 }

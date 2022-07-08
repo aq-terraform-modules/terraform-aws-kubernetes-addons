@@ -119,3 +119,47 @@ resource "aws_iam_role_policy_attachment" "efs_csi_driver" {
   role       = aws_iam_role.efs_csi_driver[count.index].name
   policy_arn = aws_iam_policy.efs_csi_driver[count.index].arn
 }
+
+###########################################################
+# EFS CSI Driver IAM Role
+###########################################################
+resource "aws_iam_policy" "velero" {
+  count  = var.enable_velero ? 1 : 0
+  name   = "VeleroIAMPolicy"
+  policy = templatefile("${path.module}/velero/policy.json", {
+    account_id = var.account_id
+  })
+}
+
+resource "aws_iam_role" "velero" {
+  count = var.enable_velero ? 1 : 0
+  name  = "VeleroIAMRole"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+        },
+        Action : "sts:AssumeRoleWithWebIdentity",
+        Condition : {
+          StringEquals : {
+            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
+            "${var.oidc_provider}:sub" : "system:serviceaccount:velero:velero-sa"
+          }
+        }
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_role_policy_attachment" "velero" {
+  count      = var.enable_velero ? 1 : 0
+  role       = aws_iam_role.velero[count.index].name
+  policy_arn = aws_iam_policy.velero[count.index].arn
+}
