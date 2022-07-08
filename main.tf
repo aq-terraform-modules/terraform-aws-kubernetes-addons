@@ -128,13 +128,13 @@ metadata:
 YAML
 }
 
-resource "kubectl_manifest" "jenkins_home_pvc" {
-  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
+# resource "kubectl_manifest" "jenkins_home_pvc" {
+#   yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
 
-  depends_on = [
-    kubectl_manifest.jenkins_namespace
-  ]
-}
+#   depends_on = [
+#     kubectl_manifest.jenkins_namespace
+#   ]
+# }
 
 resource "helm_release" "jenkins" {
   count            = var.enable_jenkins ? 1 : 0
