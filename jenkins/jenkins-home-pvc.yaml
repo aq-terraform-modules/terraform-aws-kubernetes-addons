@@ -3,6 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: jenkins-home
   namespace: jenkins
+  labels:
+    schedule/daily: enabled
 spec:
   accessModes:
   - ReadWriteOnce

@@ -8,8 +8,8 @@ resource "aws_iam_policy" "aws_loadbalancer_controller" {
 }
 
 resource "aws_iam_role" "aws_loadbalancer_controller" {
-  count  = var.enable_aws_lb_controller ? 1 : 0
-  name = "AWSLoadBalancerControllerIAMRole"
+  count = var.enable_aws_lb_controller ? 1 : 0
+  name  = "AWSLoadBalancerControllerIAMRole"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -34,7 +34,7 @@ resource "aws_iam_role" "aws_loadbalancer_controller" {
 }
 
 resource "aws_iam_role_policy_attachment" "aws_loadbalancer_controller" {
-  count  = var.enable_aws_lb_controller ? 1 : 0
+  count      = var.enable_aws_lb_controller ? 1 : 0
   role       = aws_iam_role.aws_loadbalancer_controller[count.index].name
   policy_arn = aws_iam_policy.aws_loadbalancer_controller[count.index].arn
 }
@@ -49,8 +49,8 @@ resource "aws_iam_policy" "external_dns" {
 }
 
 resource "aws_iam_role" "external_dns" {
-  count  = var.enable_external_dns ? 1 : 0
-  name = "ExternalDNSIAMRole"
+  count = var.enable_external_dns ? 1 : 0
+  name  = "ExternalDNSIAMRole"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -75,7 +75,7 @@ resource "aws_iam_role" "external_dns" {
 }
 
 resource "aws_iam_role_policy_attachment" "external_dns" {
-  count  = var.enable_external_dns ? 1 : 0
+  count      = var.enable_external_dns ? 1 : 0
   role       = aws_iam_role.external_dns[count.index].name
   policy_arn = aws_iam_policy.external_dns[count.index].arn
 }

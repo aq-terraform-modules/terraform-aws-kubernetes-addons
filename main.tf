@@ -1,4 +1,20 @@
 ###########################################################
+# SNAPSCHEDULER
+###########################################################
+resource "helm_release" "snapscheduler" {
+  count            = var.enable_snapscheduler ? 1 : 0
+  name             = "snapscheduler"
+  namespace        = "snapscheduler"
+  create_namespace = true
+  repository       = "https://backube.github.io/helm-charts"
+  chart            = "snapscheduler"
+
+  values = [
+    file("${path.module}/snapscheduler/values-custom.yaml")
+  ]
+}
+
+###########################################################
 # LOAD BALANCER CONTROLLER
 ###########################################################
 resource "helm_release" "aws_loadbalancer_controller" {
@@ -10,7 +26,7 @@ resource "helm_release" "aws_loadbalancer_controller" {
   chart            = "aws-load-balancer-controller"
 
   set {
-    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = aws_iam_role.aws_loadbalancer_controller[count.index].arn
   }
 
@@ -101,7 +117,7 @@ resource "helm_release" "external_dns" {
   ]
 
   set {
-    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = aws_iam_role.external_dns[count.index].arn
   }
 
@@ -120,7 +136,8 @@ resource "helm_release" "external_dns" {
 # JENKINS
 ###########################################################
 resource "kubectl_manifest" "jenkins_namespace" {
-    yaml_body = <<YAML
+  count     = var.enable_jenkins ? 1 : 0
+  yaml_body = <<YAML
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -129,9 +146,20 @@ YAML
 }
 
 resource "kubectl_manifest" "jenkins_home_pvc" {
+  count     = var.enable_jenkins ? 1 : 0
+  yaml_body = file("${path.module}/jenkins/snap-daily.yaml")
+
+  depends_on = [
+    kubectl_manifest.jenkins_namespace
+  ]
+}
+
+resource "kubectl_manifest" "jenkins_home_snap_daily" {
+  count     = var.enable_snapscheduler ? var.enable_jenkins ? 1 : 0 : 0
   yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
 
   depends_on = [
+    helm_release.snapscheduler,
     kubectl_manifest.jenkins_namespace
   ]
 }
@@ -160,14 +188,6 @@ resource "helm_release" "jenkins" {
 
   depends_on = [
     helm_release.ingress_nginx,
-    kubectl_manifest.jenkins_home_pvc
-  ]
-}
-
-resource "kubectl_manifest" "jenkins_snapshot" {
-  yaml_body = file("${path.module}/jenkins/snapshot.yaml")
-
-  depends_on = [
     kubectl_manifest.jenkins_home_pvc
   ]
 }

@@ -1,3 +1,9 @@
+variable "enable_snapscheduler" {
+  description = "Enable SnapScheduler to scheduler the VolumeSnapshot or not"
+  type        = bool
+  default     = false
+}
+
 variable "enable_aws_lb_controller" {
   description = "Enable AWS LB Controller or not"
   type        = bool

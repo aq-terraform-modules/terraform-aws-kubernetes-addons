@@ -5,7 +5,7 @@ terraform {
       version = ">= 1.7.0"
     }
     kustomization = {
-      source = "kbst/kustomization"
+      source  = "kbst/kustomization"
       version = "0.9.0"
     }
   }
