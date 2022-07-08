@@ -122,9 +122,9 @@ resource "helm_release" "external_dns" {
 resource "kubectl_manifest" "jenkins_namespace" {
     yaml_body = <<YAML
 apiVersion: v1
-kind: namespace
+kind: Namespace
 metadata:
-  name: jenkins
+  name: simple-nginx
 YAML
 }
 
