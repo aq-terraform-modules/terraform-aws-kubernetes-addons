@@ -106,7 +106,6 @@ resource "aws_iam_role" "efs_csi_driver" {
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
           StringEquals : {
-            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
             "${var.oidc_provider}:sub" : "system:serviceaccount:kube-system:efs-csi-controller-sa"
           }
         }
