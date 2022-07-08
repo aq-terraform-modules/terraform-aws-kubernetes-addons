@@ -147,7 +147,7 @@ YAML
 
 resource "kubectl_manifest" "jenkins_home_pvc" {
   count     = var.enable_jenkins ? 1 : 0
-  yaml_body = file("${path.module}/jenkins/snap-daily.yaml")
+  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
 
   depends_on = [
     kubectl_manifest.jenkins_namespace
@@ -156,7 +156,7 @@ resource "kubectl_manifest" "jenkins_home_pvc" {
 
 resource "kubectl_manifest" "jenkins_home_snap_daily" {
   count     = var.enable_snapscheduler ? var.enable_jenkins ? 1 : 0 : 0
-  yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
+  yaml_body = file("${path.module}/jenkins/snap-daily.yaml")
 
   depends_on = [
     helm_release.snapscheduler,
