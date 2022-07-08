@@ -15,6 +15,11 @@ variable "efs_csi_driver_context" {
   default     = {}
 }
 
+variable "efs_csi_file_system_id" {
+  description = "EFS ID to create storageclass"
+  default     = ""
+}
+
 variable "enable_aws_lb_controller" {
   description = "Enable AWS LB Controller or not"
   type        = bool
