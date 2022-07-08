@@ -36,7 +36,7 @@ resource "helm_release" "efs_csi_driver" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = try(var.efs_csi_driver_context1, {})
+    for_each = try(var.efs_csi_driver_context, {})
 
     content {
       name  = each_item.key
