@@ -160,7 +160,7 @@ resource "helm_release" "jenkins" {
 
   depends_on = [
     helm_release.ingress_nginx,
-    kubectl_manifest.jenkins_home_pvc
+    # kubectl_manifest.jenkins_home_pvc
   ]
 }
 
@@ -168,6 +168,6 @@ resource "kubectl_manifest" "jenkins_snapshot" {
   yaml_body = file("${path.module}/jenkins/snapshot.yaml")
 
   depends_on = [
-    kubectl_manifest.jenkins_home_pvc
+    # kubectl_manifest.jenkins_home_pvc
   ]
 }
