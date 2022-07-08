@@ -48,7 +48,7 @@ resource "helm_release" "efs_csi_driver" {
 resource "kubectl_manifest" "efs_storageclass" {
   count     = var.enable_efs_csi_driver ? 1 : 0
   yaml_body = templatefile("${path.module}/efs-csi-driver/storageclass.yaml", {
-    file_system_id = var.file_system_id
+    file_system_id = var.efs_csi_file_system_id
   })
 
   depends_on = [
