@@ -13,7 +13,7 @@ module "s3_velero_label" {
 module "s3_velero" {
   source        = "terraform-aws-modules/s3-bucket/aws"
   version       = "3.3.0"
-  create_bucket = enable_velero ? true : false
+  create_bucket = var.enable_velero ? true : false
 
   bucket = module.s3_velero_label.id
   acl    = "private"

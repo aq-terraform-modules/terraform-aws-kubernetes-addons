@@ -15,9 +15,9 @@ variable "enable_efs_csi_driver" {
   default     = false
 }
 
-variable "efs_csi_driver_context" {
-  description = "Set option for EFS CSI Driver"
-  default     = {}
+variable "efs_network_properties" {
+  description = "Network option for EFS"
+  type        = any
 }
 
 variable "efs_csi_file_system_id" {

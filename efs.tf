@@ -16,7 +16,7 @@ module "efs_csi" {
 
   name            = "${module.efs_label.id}-csi"
   encrypted       = true
-  subnets         = module.base_network.private_subnets
+  subnets         = var.efs_network_properties["subnets"]
   security_groups = [aws_security_group.efs.id]
   tags            = module.efs_label.tags
 }
@@ -33,11 +33,11 @@ module "sg_label" {
 resource "aws_security_group" "efs" {
   name        = "${module.sg_label.id}-efs"
   description = "Allow inbound NFS traffic from private subnets of the VPC"
-  vpc_id      = module.base_network.vpc_id
+  vpc_id      = var.efs_network_properties["vpc_id"]
 
   ingress {
     description = "Allow NFS 2049/tcp"
-    cidr_blocks = module.base_network.private_subnets_cidr_blocks
+    cidr_blocks = var.efs_network_properties["subnets_cidr_block"]
     from_port   = 2049
     to_port     = 2049
     protocol    = "tcp"
