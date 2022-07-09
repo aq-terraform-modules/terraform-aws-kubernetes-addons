@@ -246,7 +246,7 @@ resource "helm_release" "velero" {
   chart            = "velero"
 
   values = [
-    file("${path.module}/efs-csi-driver/values-custom.yaml")
+    file("${path.module}/velero/values-custom.yaml")
   ]
 
   set {
