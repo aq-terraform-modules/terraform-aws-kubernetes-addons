@@ -1,3 +1,8 @@
+variable "base_label_context" {
+  description = "Base label context that will be used to create other resource"
+  type        = any
+}
+
 variable "enable_snapscheduler" {
   description = "Enable SnapScheduler to scheduler the VolumeSnapshot or not"
   type        = bool
@@ -84,10 +89,6 @@ variable "enable_velero" {
 variable "velero_context" {
   description = "Set option for Velero"
   default     = {}
-}
-
-variable "account_id" {
-  description = "Current AWS account ID to create IAM role"
 }
 
 variable "oidc_provider" {

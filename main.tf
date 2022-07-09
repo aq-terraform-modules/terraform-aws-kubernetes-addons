@@ -46,7 +46,7 @@ resource "helm_release" "efs_csi_driver" {
 }
 
 resource "kubectl_manifest" "efs_storageclass" {
-  count     = var.enable_efs_csi_driver ? 1 : 0
+  count = var.enable_efs_csi_driver ? 1 : 0
   yaml_body = templatefile("${path.module}/efs-csi-driver/storageclass.yaml", {
     file_system_id = var.efs_csi_file_system_id
   })
@@ -232,4 +232,50 @@ resource "helm_release" "jenkins" {
     helm_release.ingress_nginx,
     kubectl_manifest.jenkins_home_pvc
   ]
+}
+
+###########################################################
+# VELERO
+###########################################################
+resource "helm_release" "velero" {
+  count            = var.enable_velero ? 1 : 0
+  name             = "aws-efs-csi-driver"
+  namespace        = "kube-system"
+  create_namespace = true
+  repository       = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
+  chart            = "aws-efs-csi-driver"
+
+  values = [
+    file("${path.module}/efs-csi-driver/values-custom.yaml")
+  ]
+
+  set {
+    name  = "serviceAccount.server.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.velero[count.index].arn
+  }
+
+  set {
+    name  = "configuration.backupStorageLocation.bucket"
+    value = module.s3_velero.s3_bucket_id
+  }
+
+  set {
+    name  = "configuration.backupStorageLocation.config.region"
+    value = module.s3_velero.s3_bucket_region
+  }
+
+  set {
+    name  = "configuration.volumeSnapshotLocation.config.region"
+    value = module.s3_velero.s3_bucket_region
+  }
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.velero_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
 }

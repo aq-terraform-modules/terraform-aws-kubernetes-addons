@@ -19,7 +19,7 @@ resource "aws_iam_role" "aws_loadbalancer_controller" {
       {
         Effect : "Allow",
         Principal : {
-          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          Federated : "arn:aws:iam::${local.account_id}:oidc-provider/${var.oidc_provider}"
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
@@ -60,7 +60,7 @@ resource "aws_iam_role" "external_dns" {
       {
         Effect : "Allow",
         Principal : {
-          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          Federated : "arn:aws:iam::${local.account_id}:oidc-provider/${var.oidc_provider}"
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
@@ -101,7 +101,7 @@ resource "aws_iam_role" "efs_csi_driver" {
       {
         Effect : "Allow",
         Principal : {
-          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          Federated : "arn:aws:iam::${local.account_id}:oidc-provider/${var.oidc_provider}"
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
@@ -124,10 +124,10 @@ resource "aws_iam_role_policy_attachment" "efs_csi_driver" {
 # EFS CSI Driver IAM Role
 ###########################################################
 resource "aws_iam_policy" "velero" {
-  count  = var.enable_velero ? 1 : 0
-  name   = "VeleroIAMPolicy"
+  count = var.enable_velero ? 1 : 0
+  name  = "VeleroIAMPolicy"
   policy = templatefile("${path.module}/velero/policy.json", {
-    account_id = var.account_id
+    s3_bucket_arn = module.s3_velero.s3_bucket_arn
   })
 }
 
@@ -143,7 +143,7 @@ resource "aws_iam_role" "velero" {
       {
         Effect : "Allow",
         Principal : {
-          Federated : "arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"
+          Federated : "arn:aws:iam::${local.account_id}:oidc-provider/${var.oidc_provider}"
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
