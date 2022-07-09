@@ -239,11 +239,11 @@ resource "helm_release" "jenkins" {
 ###########################################################
 resource "helm_release" "velero" {
   count            = var.enable_velero ? 1 : 0
-  name             = "aws-efs-csi-driver"
-  namespace        = "kube-system"
+  name             = "velero"
+  namespace        = "velero"
   create_namespace = true
-  repository       = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
-  chart            = "aws-efs-csi-driver"
+  repository       = "https://vmware-tanzu.github.io/helm-charts"
+  chart            = "velero"
 
   values = [
     file("${path.module}/efs-csi-driver/values-custom.yaml")
