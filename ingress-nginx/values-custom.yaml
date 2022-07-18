@@ -676,16 +676,16 @@ controller:
   metrics:
     port: 10254
     # if this port is changed, change healthz-port: in extraArgs: accordingly
-    enabled: false
+    enabled: true
 
     service:
       annotations: {}
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "10254"
+      # prometheus.io/scrape: "true"
+      # prometheus.io/port: "10254"
 
       # clusterIP: ""
 
-      # -- List of IP addresses at which the stats-exporter service is available
+      ## List of IP addresses at which the stats-exporter service is available
       ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
       ##
       externalIPs: []
@@ -713,6 +713,7 @@ controller:
       targetLabels: []
       relabelings: []
       metricRelabelings: []
+
 
     prometheusRule:
       enabled: false
