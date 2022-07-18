@@ -700,12 +700,12 @@ controller:
     serviceMonitor:
       enabled: true
       additionalLabels: {}
-      ## The label to use to retrieve the job name from.
-      ## jobLabel: "app.kubernetes.io/name"
+      # The label to use to retrieve the job name from.
+      jobLabel: "app.kubernetes.io/name"
       namespace: "monitoring"
       # namespaceSelector: {}
-      ## Default: scrape .Release.Namespace only
-      ## To scrape all, use the following:
+      # Default: scrape .Release.Namespace only
+      # To scrape all, use the following:
       namespaceSelector:
         any: true
       scrapeInterval: 30s
