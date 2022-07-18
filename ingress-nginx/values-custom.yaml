@@ -698,11 +698,11 @@ controller:
       # nodePort: ""
 
     serviceMonitor:
-      enabled: false
+      enabled: true
       additionalLabels: {}
       ## The label to use to retrieve the job name from.
       ## jobLabel: "app.kubernetes.io/name"
-      namespace: ""
+      namespace: "monitoring"
       namespaceSelector: {}
       ## Default: scrape .Release.Namespace only
       ## To scrape all, use the following:
