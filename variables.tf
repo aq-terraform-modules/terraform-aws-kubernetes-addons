@@ -87,6 +87,11 @@ variable "enable_jenkins" {
   default     = false
 }
 
+variable "jenkins_chart_version" {
+  description = "Specify chart version for Jenkins chart"
+  default     = ""
+}
+
 variable "jenkins_context" {
   description = "Set option for Jenkins"
   default     = {}

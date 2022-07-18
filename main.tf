@@ -1,4 +1,30 @@
 ###########################################################
+# PROMETHEUS
+###########################################################
+resource "helm_release" "prometheus" {
+  count            = var.enable_prometheus ? 1 : 0
+  name             = "prometheus"
+  namespace        = "monitoring"
+  create_namespace = true
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "kube-prometheus-stack"
+
+  values = [
+    file("${path.module}/prometheus/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.prometheus_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+}
+
+###########################################################
 # SNAPSCHEDULER
 ###########################################################
 resource "helm_release" "snapscheduler" {
@@ -11,6 +37,10 @@ resource "helm_release" "snapscheduler" {
 
   values = [
     file("${path.module}/snapscheduler/values-custom.yaml")
+  ]
+
+  depends_on = [
+    helm_release.prometheus
   ]
 }
 
@@ -43,6 +73,10 @@ resource "helm_release" "efs_csi_driver" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.prometheus
+  ]
 }
 
 resource "kubectl_manifest" "efs_storageclass" {
@@ -81,32 +115,10 @@ resource "helm_release" "aws_loadbalancer_controller" {
       value = each_item.value
     }
   }
-}
 
-###########################################################
-# PROMETHEUS
-###########################################################
-resource "helm_release" "prometheus" {
-  count            = var.enable_prometheus ? 1 : 0
-  name             = "prometheus"
-  namespace        = "monitoring"
-  create_namespace = true
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "kube-prometheus-stack"
-
-  values = [
-    file("${path.module}/prometheus/values-custom.yaml")
+  depends_on = [
+    helm_release.prometheus
   ]
-
-  dynamic "set" {
-    iterator = each_item
-    for_each = try(var.prometheus_context, {})
-
-    content {
-      name  = each_item.key
-      value = each_item.value
-    }
-  }
 }
 
 ###########################################################
@@ -261,6 +273,7 @@ resource "helm_release" "jenkins" {
   create_namespace = true
   repository       = "https://charts.jenkins.io"
   chart            = "jenkins"
+  version          = var.jenkins_chart_version
 
   values = [
     file("${path.module}/jenkins/values-custom.yaml")
