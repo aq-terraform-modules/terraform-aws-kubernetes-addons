@@ -143,6 +143,10 @@ resource "helm_release" "ingress_nginx" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.prometheus
+  ]
 }
 
 ###########################################################
@@ -169,6 +173,10 @@ resource "helm_release" "cert_manager" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.prometheus
+  ]
 }
 resource "kubectl_manifest" "cluster_issuer" {
   count     = var.enable_cert_manager ? 1 : 0
@@ -208,6 +216,10 @@ resource "helm_release" "external_dns" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.prometheus
+  ]
 }
 
 ###########################################################
@@ -275,6 +287,7 @@ resource "helm_release" "jenkins" {
   }
 
   depends_on = [
+    helm_release.prometheus,
     helm_release.ingress_nginx,
     kubectl_manifest.jenkins_home_pvc
   ]
@@ -324,4 +337,8 @@ resource "helm_release" "velero" {
       value = each_item.value
     }
   }
+
+  depends_on = [
+    helm_release.prometheus,
+  ]
 }
