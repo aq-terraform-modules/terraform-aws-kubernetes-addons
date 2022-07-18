@@ -703,11 +703,11 @@ controller:
       ## The label to use to retrieve the job name from.
       ## jobLabel: "app.kubernetes.io/name"
       namespace: "monitoring"
-      namespaceSelector: {}
+      # namespaceSelector: {}
       ## Default: scrape .Release.Namespace only
       ## To scrape all, use the following:
-      ## namespaceSelector:
-      ##   any: true
+      namespaceSelector:
+        any: true
       scrapeInterval: 30s
       # honorLabels: true
       targetLabels: []
