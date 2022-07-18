@@ -84,6 +84,32 @@ resource "helm_release" "aws_loadbalancer_controller" {
 }
 
 ###########################################################
+# PROMETHEUS
+###########################################################
+resource "helm_release" "prometheus" {
+  count            = var.enable_prometheus ? 1 : 0
+  name             = "prometheus"
+  namespace        = "monitoring"
+  create_namespace = true
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "kube-prometheus-stack"
+
+  values = [
+    file("${path.module}/prometheus/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.prometheus_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+}
+
+###########################################################
 # INGRESS NGINX
 ###########################################################
 resource "helm_release" "ingress_nginx" {
@@ -97,6 +123,16 @@ resource "helm_release" "ingress_nginx" {
   values = [
     file("${path.module}/ingress-nginx/values-custom.yaml")
   ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = var.enable_prometheus ? {"controller.metrics.enabled": "true"} : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
 
   dynamic "set" {
     iterator = each_item
@@ -217,6 +253,16 @@ resource "helm_release" "jenkins" {
   values = [
     file("${path.module}/jenkins/values-custom.yaml")
   ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = var.enable_prometheus ? {"controller.prometheus.enabled": "true"} : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
 
   dynamic "set" {
     iterator = each_item

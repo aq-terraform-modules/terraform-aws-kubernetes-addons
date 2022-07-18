@@ -36,6 +36,18 @@ variable "aws_lb_controller_context" {
   default     = {}
 }
 
+variable "enable_prometheus" {
+  description = "Enable Prometheus stack or not"
+  type        = bool
+  default     = false
+}
+
+variable "prometheus_context" {
+  description = "Set option for prometheus"
+  default     = {}
+}
+
+
 variable "enable_ingress_nginx" {
   description = "Enable Ingress Nginx or not"
   type        = bool
