@@ -3151,13 +3151,16 @@ prometheus:
     ## If nil, select own namespace. Namespaces to be selected for ServiceMonitor discovery.
     ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
     ##
-    ruleNamespaceSelector: {}
+    ruleNamespaceSelector: # {}
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: Exists
 
     ## If true, a nil or {} value for prometheus.prometheusSpec.ruleSelector will cause the
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the PrometheusRule resources created
     ##
-    ruleSelectorNilUsesHelmValues: true
+    ruleSelectorNilUsesHelmValues: false
 
     ## PrometheusRules to be selected for target discovery.
     ## If {}, select all PrometheusRules
@@ -3236,7 +3239,7 @@ prometheus:
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the probes created
     ##
-    probeSelectorNilUsesHelmValues: true
+    probeSelectorNilUsesHelmValues: false
 
     ## Probes to be selected for target discovery.
     ## If {}, select all Probes
@@ -3250,7 +3253,10 @@ prometheus:
     ## Namespaces to be selected for Probe discovery.
     ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
     ##
-    probeNamespaceSelector: {}
+    probeNamespaceSelector: # {}
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: Exists
 
     ## How long to retain metrics
     ## TODO: Metrics retention
@@ -3907,13 +3913,16 @@ thanosRuler:
     ## If nil, select own namespace. Namespaces to be selected for ServiceMonitor discovery.
     ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
     ##
-    ruleNamespaceSelector: {}
+    ruleNamespaceSelector: # {}
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: Exists
 
     ## If true, a nil or {} value for thanosRuler.thanosRulerSpec.ruleSelector will cause the
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the PrometheusRule resources created
     ##
-    ruleSelectorNilUsesHelmValues: true
+    ruleSelectorNilUsesHelmValues: false
 
     ## PrometheusRules to be selected for target discovery.
     ## If {}, select all PrometheusRules
