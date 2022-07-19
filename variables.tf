@@ -108,6 +108,17 @@ variable "velero_context" {
   default     = {}
 }
 
+variable "enable_keda" {
+  description = "Enable Keda service or not"
+  type        = bool
+  default     = false
+}
+
+variable "keda_context" {
+  description = "Set option for Keda"
+  default     = {}
+}
+
 variable "oidc_provider" {
   description = "EKS OIDC provider to create IAM role"
 }

@@ -355,3 +355,43 @@ resource "helm_release" "velero" {
     helm_release.prometheus,
   ]
 }
+
+###########################################################
+# KEDA
+###########################################################
+resource "helm_release" "keda" {
+  count            = var.enable_keda ? 1 : 0
+  name             = "keda"
+  namespace        = "keda"
+  create_namespace = true
+  repository       = "https://kedacore.github.io/charts"
+  chart            = "keda"
+
+  values = [
+    file("${path.module}/keda/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = var.enable_prometheus ? {"prometheus.metricServer.enabled": "true", "prometheus.operator.enabled": "true"} : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.keda_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  depends_on = [
+    helm_release.prometheus,
+  ]
+}
