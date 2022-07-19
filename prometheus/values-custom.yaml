@@ -50,7 +50,7 @@ defaultRules:
     kubernetesResources: true
     kubernetesStorage: true
     kubernetesSystem: true
-    kubeScheduler: true
+    kubeScheduler: false
     kubeStateMetrics: true
     network: true
     node: true
