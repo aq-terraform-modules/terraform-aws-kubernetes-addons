@@ -3227,7 +3227,10 @@ prometheus:
     ## Namespaces to be selected for PodMonitor discovery.
     ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#namespaceselector for usage
     ##
-    podMonitorNamespaceSelector: {}
+    podMonitorNamespaceSelector: # {}
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: Exists
 
     ## If true, a nil or {} value for prometheus.prometheusSpec.probeSelector will cause the
     ## prometheus resource to be created with selectors based on values in the helm deployment,
