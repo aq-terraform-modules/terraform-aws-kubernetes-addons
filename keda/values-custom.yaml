@@ -222,7 +222,7 @@ prometheus:
     path: /metrics
     podMonitor:
       # Enables PodMonitor creation for the Prometheus Operator
-      enabled: false
+      enabled: true
       interval:
       scrapeTimeout:
       namespace:
@@ -234,7 +234,7 @@ prometheus:
     path: /metrics
     podMonitor:
       # Enables PodMonitor creation for the Prometheus Operator
-      enabled: false
+      enabled: true
       interval:
       scrapeTimeout:
       namespace:
