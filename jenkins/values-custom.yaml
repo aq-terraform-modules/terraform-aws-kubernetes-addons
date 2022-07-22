@@ -251,10 +251,10 @@ controller:
   additionalPlugins: # []
     - prometheus:2.0.11
     - sshd:3.1.0
+    - role-strategy:546.ve16648865996
     - generic-webhook-trigger:1.84
     - pipeline-stage-view:2.24
-    - pipeline-graph-analysis:195.v5812d95a_a_2f9
-    - role-strategy:546.ve16648865996
+    # - pipeline-graph-analysis:195.v5812d95a_a_2f9
     # - blueocean:1.25.5
     
 
