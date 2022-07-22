@@ -1403,7 +1403,7 @@ grafana:
       url: https://grafana.net
   ## grafana Authentication can be enabled with the following values on grafana.ini
     server:
-      root_url: '%(protocol)s://%(domain)s:/grafana'
+      root_url: '%(protocol)s://%(domain)s:'
   # https://grafana.com/docs/grafana/latest/auth/github/#enable-github-in-grafana
   # auth.github:
   #    enabled: false
