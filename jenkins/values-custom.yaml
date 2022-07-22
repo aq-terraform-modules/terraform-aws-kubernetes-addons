@@ -249,8 +249,14 @@ controller:
 
   # List of plugins to install in addition to those listed in controller.installPlugins
   additionalPlugins: # []
+    - prometheus:2.0.11
     - sshd:3.1.0
     - generic-webhook-trigger:1.84
+    - pipeline-stage-view:2.24
+    - pipeline-graph-analysis:195.v5812d95a_a_2f9
+    - role-strategy:546.ve16648865996
+    # - blueocean:1.25.5
+    
 
   # Enable to initialize the Jenkins controller only once on initial installation.
   # Without this, whenever the controller gets restarted (Evicted, etc.) it will fetch plugin updates which has the potential to cause breakage.
