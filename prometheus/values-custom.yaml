@@ -857,7 +857,8 @@ grafana:
     resources: {}
 
   ## Pod Annotations
-  # podAnnotations: {}
+  podAnnotations: # {}
+    linkerd.io/inject: enabled
 
   ## Pod Labels
   # podLabels: {}
@@ -1262,18 +1263,18 @@ grafana:
   ##
   ## `path` must be /var/lib/grafana/dashboards/<provider_name>
   ##
-  dashboardProviders: {}
-  #  dashboardproviders.yaml:
-  #    apiVersion: 1
-  #    providers:
-  #    - name: 'default'
-  #      orgId: 1
-  #      folder: ''
-  #      type: file
-  #      disableDeletion: false
-  #      editable: true
-  #      options:
-  #        path: /var/lib/grafana/dashboards/default
+  dashboardProviders: # {}
+   dashboardproviders.yaml:
+     apiVersion: 1
+     providers:
+     - name: 'default'
+       orgId: 1
+       folder: ''
+       type: file
+       disableDeletion: false
+       editable: true
+       options:
+         path: /var/lib/grafana/dashboards/default
 
   ## Configure grafana dashboard to import
   ## NOTE: To use dashboards you must also enable/configure dashboardProviders
@@ -1281,8 +1282,81 @@ grafana:
   ##
   ## dashboards per provider, use provider name as key.
   ##
-  dashboards: {}
-    # default:
+  dashboards: # {}
+    default:
+    # all these charts are hosted at https://grafana.com/grafana/dashboards/{id}
+      top-line:
+        gnetId: 15474
+        revision: 3
+        datasource: prometheus
+      health:
+        gnetId: 15486
+        revision: 2
+        datasource: prometheus
+      kubernetes:
+        gnetId: 15479
+        revision: 2
+        datasource: prometheus
+      namespace:
+        gnetId: 15478
+        revision: 2
+        datasource: prometheus
+      deployment:
+        gnetId: 15475
+        revision: 5
+        datasource: prometheus
+      pod:
+        gnetId: 15477
+        revision: 2
+        datasource: prometheus
+      service:
+        gnetId: 15480
+        revision: 2
+        datasource: prometheus
+      route:
+        gnetId: 15481
+        revision: 2
+        datasource: prometheus
+      authority:
+        gnetId: 15482
+        revision: 2
+        datasource: prometheus
+      cronjob:
+        gnetId: 15483
+        revision: 2
+        datasource: prometheus
+      job:
+        gnetId: 15487
+        revision: 2
+        datasource: prometheus
+      daemonset:
+        gnetId: 15484
+        revision: 2
+        datasource: prometheus
+      replicaset:
+        gnetId: 15491
+        revision: 2
+        datasource: prometheus
+      statefulset:
+        gnetId: 15493
+        revision: 2
+        datasource: prometheus
+      replicationcontroller:
+        gnetId: 15492
+        revision: 2
+        datasource: prometheus
+      prometheus:
+        gnetId: 15489
+        revision: 2
+        datasource: prometheus
+      prometheus-benchmark:
+        gnetId: 15490
+        revision: 2
+        datasource: prometheus
+      multicluster:
+        gnetId: 15488
+        revision: 2
+        datasource: prometheus
     #   some-dashboard:
     #     json: |
     #       $RAW_JSON
@@ -1328,9 +1402,8 @@ grafana:
     grafana_net:
       url: https://grafana.net
   ## grafana Authentication can be enabled with the following values on grafana.ini
-  # server:
-        # The full public facing url you use in browser, used for redirects and emails
-  #    root_url:
+    server:
+      root_url: '%(protocol)s://%(domain)s:/grafana/'
   # https://grafana.com/docs/grafana/latest/auth/github/#enable-github-in-grafana
   # auth.github:
   #    enabled: false
