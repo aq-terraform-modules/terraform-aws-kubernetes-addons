@@ -158,6 +158,16 @@ resource "helm_release" "ingress_nginx" {
 
   dynamic "set" {
     iterator = each_item
+    for_each = var.enable_linkerd ? {"controller.podAnnotations.linkerd\\.io/inject": "true"} : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  dynamic "set" {
+    iterator = each_item
     for_each = try(var.ingress_nginx_context, {})
 
     content {
