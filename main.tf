@@ -457,5 +457,6 @@ resource "helm_release" "linkerd_viz" {
 
   depends_on = [
     helm_release.prometheus,
+    helm_release.linkerd,
   ]
 }
