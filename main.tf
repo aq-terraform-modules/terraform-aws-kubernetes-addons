@@ -15,6 +15,16 @@ resource "helm_release" "prometheus" {
 
   dynamic "set" {
     iterator = each_item
+    for_each = var.enable_linkerd ? {} : {"prometheus.prometheusSpec.additionalScrapeConfigs": "[]"}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  dynamic "set" {
+    iterator = each_item
     for_each = try(var.prometheus_context, {})
 
     content {
@@ -384,6 +394,60 @@ resource "helm_release" "keda" {
   dynamic "set" {
     iterator = each_item
     for_each = try(var.keda_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  depends_on = [
+    helm_release.prometheus,
+  ]
+}
+
+###########################################################
+# LINKERD
+###########################################################
+
+resource "helm_release" "linkerd" {
+  count            = var.enable_linkerd ? 1 : 0
+  name             = "linkerd2"
+  repository       = "https://helm.linkerd.io/stable"
+  chart            = "linkerd2"
+
+  values = [
+    file("${path.module}/linkerd/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.linkerd_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  depends_on = [
+    helm_release.prometheus,
+  ]
+}
+
+resource "helm_release" "linkerd_viz" {
+  count            = var.enable_linkerd ? 1 : 0
+  name             = "linkerd-viz"
+  repository       = "https://helm.linkerd.io/stable"
+  chart            = "linkerd-viz"
+
+  values = [
+    file("${path.module}/linkerd/viz-values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.linkerd_viz_context, {})
 
     content {
       name  = each_item.key

@@ -119,6 +119,22 @@ variable "keda_context" {
   default     = {}
 }
 
+variable "enable_linkerd" {
+  description = "Enable Linkerd service or not"
+  type        = bool
+  default     = false
+}
+
+variable "linkerd_context" {
+  description = "Set context option for Linkerd"
+  default     = {}
+}
+
+variable "linkerd_viz_context" {
+  description = "Set context option for Linkerd-viz"
+  default     = {}
+}
+
 variable "oidc_provider" {
   description = "EKS OIDC provider to create IAM role"
 }
