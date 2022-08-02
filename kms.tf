@@ -16,6 +16,6 @@ resource "aws_kms_key" "vault" {
 
   tags = merge(
     { Name = "${module.kms_label.id}-vault-key" },
-    tags = module.kms_label.tags,
+    tags = module.kms_label.tags
   )
 }
