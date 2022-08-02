@@ -473,6 +473,8 @@ server:
   # TODO: Extra Env
   extraEnvironmentVars: # {}
     AWS_ROLE_SESSION_NAME: vault
+    # AWS_DEFAULT_REGION: ${region}
+    # AWS_REGION: ${region}
     # GOOGLE_REGION: global
     # GOOGLE_PROJECT: myproject
     # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json
