@@ -135,6 +135,18 @@ variable "linkerd_viz_context" {
   default     = {}
 }
 
+variable "enable_vault" {
+  description = "Enable Vault service or not"
+  type        = bool
+  default     = false
+}
+
+variable "vault_context" {
+  description = "Set context option for Vault"
+  default     = {}
+}
+
+
 variable "oidc_provider" {
   description = "EKS OIDC provider to create IAM role"
 }

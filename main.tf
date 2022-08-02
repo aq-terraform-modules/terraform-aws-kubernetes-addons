@@ -470,3 +470,33 @@ resource "helm_release" "linkerd_viz" {
     helm_release.linkerd,
   ]
 }
+
+###########################################################
+# Vault
+###########################################################
+resource "helm_release" "vault" {
+  count            = var.enable_vault ? 1 : 0
+  name             = "vault"
+  namespace        = "vault"
+  create_namespace = true
+  repository       = "https://helm.releases.hashicorp.com"
+  chart            = "vault"
+
+  values = [
+    file("${path.module}/vault/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.vault_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  depends_on = [
+    helm_release.prometheus,
+  ]
+}
