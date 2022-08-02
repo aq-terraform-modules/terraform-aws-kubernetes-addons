@@ -482,13 +482,24 @@ resource "helm_release" "vault" {
   repository       = "https://helm.releases.hashicorp.com"
   chart            = "vault"
 
-  values = [
-    file("${path.module}/vault/values-custom.yaml")
-  ]
+  values = ["${path.module}/vault/values-custom.yaml", {
+    region     = local.region,
+    kms_key_id = aws_kms_key.vault.key_id
+  })]
 
   set {
     name  = "server.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = aws_iam_role.vault[count.index].arn
+  }
+
+  set {
+    name  = "server.extraEnvironmentVars.AWS_DEFAULT_REGION"
+    value = local.region
+  }
+
+  set {
+    name  = "server.extraEnvironmentVars.AWS_REGION"
+    value = local.region
   }
 
   dynamic "set" {
@@ -503,5 +514,6 @@ resource "helm_release" "vault" {
 
   depends_on = [
     helm_release.prometheus,
+    aws_kms_key.vault
   ]
 }

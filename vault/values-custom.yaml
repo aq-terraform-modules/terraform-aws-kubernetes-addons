@@ -768,6 +768,11 @@ server:
 
         service_registration "kubernetes" {}
 
+        seal "awskms" {
+          region     = "${region}"
+          kms_key_id = "${kms_key_id}"
+        }
+
     # config is a raw string of default configuration when using a Stateful
     # deployment. Default is to use a Consul for its HA storage backend.
     # This should be HCL.
