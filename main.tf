@@ -482,10 +482,10 @@ resource "helm_release" "vault" {
   repository       = "https://helm.releases.hashicorp.com"
   chart            = "vault"
 
-  values = ["${path.module}/vault/values-custom.yaml", {
+  values = templatefile("${path.module}/vault/values-custom.yaml", {
     region     = local.region,
     kms_key_id = aws_kms_key.vault.key_id
-  })]
+  })
 
   set {
     name  = "server.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
