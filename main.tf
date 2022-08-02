@@ -484,7 +484,7 @@ resource "helm_release" "vault" {
 
   values = templatefile("${path.module}/vault/values-custom.yaml", {
     region     = local.region,
-    kms_key_id = aws_kms_key.vault.key_id
+    kms_key_id = aws_kms_key.vault[0].key_id
   })
 
   set {
