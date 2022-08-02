@@ -514,6 +514,7 @@ resource "helm_release" "vault" {
 
   depends_on = [
     helm_release.prometheus,
+    helm_release.ingress_nginx,
     aws_kms_key.vault
   ]
 }
