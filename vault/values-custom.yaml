@@ -310,7 +310,7 @@ server:
 
   # Configure the logging verbosity for the Vault server.
   # Supported log levels include: trace, debug, info, warn, error
-  logLevel: ""
+  logLevel: "debug"
 
   # Configure the logging format for the Vault server.
   # Supported log formats include: standard, json
@@ -471,7 +471,8 @@ server:
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
   # used to include variables required for auto-unseal.
   # TODO: Extra Env
-  extraEnvironmentVars: {}
+  extraEnvironmentVars: # {}
+    AWS_ROLE_SESSION_NAME: vault
     # GOOGLE_REGION: global
     # GOOGLE_PROJECT: myproject
     # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json

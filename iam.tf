@@ -163,3 +163,44 @@ resource "aws_iam_role_policy_attachment" "velero" {
   role       = aws_iam_role.velero[count.index].name
   policy_arn = aws_iam_policy.velero[count.index].arn
 }
+
+###########################################################
+# Vault IAM Role
+###########################################################
+resource "aws_iam_policy" "vault" {
+  count  = var.enable_vault ? 1 : 0
+  name   = "VaultIAMPolicy"
+  policy = file("${path.module}/vault/policy.json")
+}
+
+resource "aws_iam_role" "vault" {
+  count = var.enable_vault ? 1 : 0
+  name  = "VaultIAMRole"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Federated : "arn:aws:iam::${local.account_id}:oidc-provider/${var.oidc_provider}"
+        },
+        Action : "sts:AssumeRoleWithWebIdentity",
+        Condition : {
+          StringEquals : {
+            "${var.oidc_provider}:aud": "sts.amazonaws.com",
+            "${var.oidc_provider}:sub": "system:serviceaccount:vault:vault"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "vault" {
+  count      = var.enable_vault ? 1 : 0
+  role       = aws_iam_role.vault[count.index].name
+  policy_arn = aws_iam_policy.vault[count.index].arn
+}

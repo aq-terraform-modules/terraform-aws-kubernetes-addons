@@ -486,6 +486,11 @@ resource "helm_release" "vault" {
     file("${path.module}/vault/values-custom.yaml")
   ]
 
+  set {
+    name  = "server.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.vault[count.index].arn
+  }
+
   dynamic "set" {
     iterator = each_item
     for_each = try(var.vault_context, {})
