@@ -24,7 +24,7 @@ spec:
   # respect to the UTC timezone. The following pre-defined
   # shortcuts are also supported: @hourly, @daily, @weekly,
   # @monthly, and @yearly
-  schedule: "0 0 * * *" # Currently using per minute for testing purpose
+  schedule: "* * * * *" # Currently using per minute for testing purpose
   snapshotTemplate:
     # A set of labels can be added to each
     # VolumeSnapshot object

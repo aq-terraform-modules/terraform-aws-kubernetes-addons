@@ -51,6 +51,7 @@ dnsPolicy: ClusterFirst
 
 # Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
 # If the value is a string then it is evaluated as a template.
+# TODO: Plugin for CSI and AWS
 initContainers:
   - name: velero-plugin-for-csi
     image: velero/velero-plugin-for-csi:v0.3.0
@@ -190,12 +191,14 @@ configuration:
   backupStorageLocation:
     # name is the name of the backup storage location where backups should be stored. If a name is not provided,
     # a backup storage location will be created with the name "default". Optional.
+    # TODO: S3 bucket configuration
     name: s3
     # provider is the name for the backup storage location provider. If omitted
     # `configuration.provider` will be used instead.
     provider: aws
-    # bucket is the name of the bucket to store backups in. Required.
-    bucket: velero-133631580572
+    # bucket is the name of the bucket to store backups in.
+    # bucket is required
+    bucket: 
     # caCert defines a base64 encoded CA bundle to use when verifying TLS connections to the provider. Optional.
     caCert:
     # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
@@ -208,7 +211,8 @@ configuration:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: # {}
-      region: us-east-1
+      # region is required
+      region: 
     #  s3ForcePathStyle:
     #  s3Url:
     #  kmsKeyId:
@@ -224,6 +228,7 @@ configuration:
   # Parameters for the `default` VolumeSnapshotLocation. See
   # https://velero.io/docs/v1.6/api-types/volumesnapshotlocation/
   volumeSnapshotLocation:
+    # TODO: Snapshot configuration
     # name is the name of the volume snapshot location where snapshots are being taken. Required.
     name: volumesnapshot
     # provider is the name for the volume snapshot provider. If omitted
@@ -232,7 +237,8 @@ configuration:
     # Additional provider-specific configuration. See link above
     # for details of required/optional fields for your provider.
     config: # {}
-      region: us-east-1
+      # region is required
+      region:
   #    apiTimeout:
   #    resourceGroup:
   #    The ID of the subscription where volume snapshots should be stored, if different from the cluster’s subscription. If specified, also requires `configuration.volumeSnapshotLocation.config.resourceGroup`to be set. (Azure only)
@@ -266,7 +272,7 @@ configuration:
   extraEnvVars: {}
 
   # Comma separated list of velero feature flags. default: empty
-  # features: EnableCSI
+  # TODO: Enable CSI configuration
   features: EnableCSI
 
   # Set log-level for Velero pod. Default: info. Other options: debug, warning, error, fatal, panic.
@@ -304,7 +310,7 @@ serviceAccount:
     create: true
     name: velero-sa
     annotations:
-      eks.amazonaws.com/role-arn: "arn:aws:iam::133631580572:role/VeleroIAMRole"
+      eks.amazonaws.com/role-arn:
     labels:
 
 # Info about the secret to be used by the Velero deployment, which
@@ -314,6 +320,8 @@ credentials:
   # Whether a secret should be used. Set to false if, for examples:
   # - using kube2iam or kiam to provide AWS IAM credentials instead of providing the key file. (AWS only)
   # - using workload identity instead of providing the key file. (GCP only)
+  # TODO: Credentials configuration
+  # In this case, we will use IRSA insead of AWS basic credentials, so we will turn this off
   useSecret: false
   # Name of the secret to create if `useSecret` is true and `existingSecret` is empty
   name:
@@ -402,6 +410,7 @@ restic:
   nodeSelector: {}
 
 # Backup schedules to create.
+# TODO: Additional backup configuration
 # Eg:
 # schedules:
 #   mybackup:
