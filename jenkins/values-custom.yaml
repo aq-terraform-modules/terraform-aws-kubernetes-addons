@@ -251,6 +251,7 @@ controller:
   additionalPlugins: # []
     - prometheus:2.0.11
     - sshd:3.1.0
+    - pipeline-aws:1.43
     - role-strategy:546.ve16648865996
     - generic-webhook-trigger:1.84
     - pipeline-stage-view:2.24
