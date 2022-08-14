@@ -518,3 +518,19 @@ resource "helm_release" "vault" {
     aws_kms_key.vault
   ]
 }
+
+###########################################################
+# Secret CSI
+###########################################################
+resource "helm_release" "secret_csi" {
+  count            = var.enable_secret_csi ? 1 : 0
+  name             = "secret-csi"
+  namespace        = "kube-system"
+  repository       = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+  chart            = "secrets-store-csi-driver"
+
+  set {
+    name  = "syncSecret.enabled"
+    value = true
+  }
+}

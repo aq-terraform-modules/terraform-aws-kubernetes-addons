@@ -146,6 +146,11 @@ variable "vault_context" {
   default     = {}
 }
 
+variable "enable_secret_csi" {
+  description = "Enable Secret CSI Driver service or not"
+  type        = bool
+  default     = false
+}
 
 variable "oidc_provider" {
   description = "EKS OIDC provider to create IAM role"
