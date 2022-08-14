@@ -504,6 +504,16 @@ resource "helm_release" "vault" {
 
   dynamic "set" {
     iterator = each_item
+    for_each = var.enable_secret_csi ? {"csi.enabled": "true"} : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  dynamic "set" {
+    iterator = each_item
     for_each = try(var.vault_context, {})
 
     content {
