@@ -1590,7 +1590,7 @@ server:
       p, role:org-admin, clusters, *, *, allow
       p, role:org-admin, repositories, *, *, allow
       p, role:org-admin, projects, *, *, allow
-      g, "73d23c39-21e0-44a6-af0d-0d5a5949ad58", role:org-admin
+      g, "413c9ef1-a424-41a0-9a70-4c40e4befa6a", role:org-admin
     # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
     # Policy rules are in the form:
     #   p, subject, resource, action, object, effect
