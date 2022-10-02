@@ -260,7 +260,7 @@ configs:
     extra:
       # {}
       # Secret for Azure AD SSO
-      oidc.azure.clientSecret: "MW5IOFF+M1RwWExteGNoX1lkdGxaWVN+S1BFR2F4aHlyQXBSSmI4YQ=="
+      oidc.azure.clientSecret: "1nH8Q~3TpXLmxch_YdtlZYS~KPEGaxhyrApRJb8a"
       # LDAP_PASSWORD: "mypassword"
 
     # -- Argo TLS Data
