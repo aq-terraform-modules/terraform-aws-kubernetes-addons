@@ -14,6 +14,11 @@ variable "argocd_context" {
   default     = {}
 }
 
+variable "argocd_chart_version" {
+  description = "Chart version for ArgoCD"
+  default     = ""
+}
+
 variable "enable_snapscheduler" {
   description = "Enable SnapScheduler to scheduler the VolumeSnapshot or not"
   type        = bool
