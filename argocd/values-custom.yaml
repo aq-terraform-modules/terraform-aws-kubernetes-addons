@@ -258,7 +258,9 @@ configs:
     ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#sensitive-data-and-sso-client-secrets
     ## Note that all values must be non-empty.
     extra:
-      {}
+      # {}
+      # Secret for Azure AD SSO
+      oidc.azure.clientSecret: "MW5IOFF+M1RwWExteGNoX1lkdGxaWVN+S1BFR2F4aHlyQXBSSmI4YQ=="
       # LDAP_PASSWORD: "mypassword"
 
     # -- Argo TLS Data
@@ -2282,8 +2284,6 @@ notifications:
     ## Can be used for templates, notification services etc. Some examples given below.
     ## For more information: https://argocd-notifications.readthedocs.io/en/stable/services/overview/
     items: # {}
-      # Secret for Azure AD SSO
-      oidc.azure.clientSecret: "1nH8Q~3TpXLmxch_YdtlZYS~KPEGaxhyrApRJb8a"
       # slack-token:
       #   # For more information: https://argocd-notifications.readthedocs.io/en/stable/services/slack/
 
