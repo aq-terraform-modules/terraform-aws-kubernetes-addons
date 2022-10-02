@@ -3,6 +3,17 @@ variable "base_label_context" {
   type        = any
 }
 
+variable "enable_argocd" {
+  description = "Enable ArgoCD or not"
+  type        = bool
+  default     = false
+}
+
+variable "argocd_context" {
+  description = "Set option for ArgoCD"
+  default     = {}
+}
+
 variable "enable_snapscheduler" {
   description = "Enable SnapScheduler to scheduler the VolumeSnapshot or not"
   type        = bool
