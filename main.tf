@@ -1,4 +1,36 @@
 ###########################################################
+# ARGOCD
+###########################################################
+resource "helm_release" "argocd" {
+  count            = var.enable_argocd ? 1 : 0
+  name             = "argocd"
+  namespace        = "argocd"
+  create_namespace = true
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  version          = var.argocd_chart_version
+
+  values = [
+    file("${path.module}/argocd/values-custom.yaml")
+  ]
+
+  dynamic "set" {
+    iterator = each_item
+    for_each = try(var.argocd_context, {})
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  depends_on = [
+    helm_release.prometheus,
+    helm_release.ingress_nginx,
+  ]
+}
+
+###########################################################
 # PROMETHEUS
 ###########################################################
 resource "helm_release" "prometheus" {
