@@ -1481,7 +1481,7 @@ server:
     ## Secrets must be manually created in the namespace
     ##
     hosts:
-      - argocd.acloudguru.anhquach.dev
+      - argocdgrpc.acloudguru.anhquach.dev
 
     # -- List of ingress paths for dedicated [gRPC-ingress]
     paths:
