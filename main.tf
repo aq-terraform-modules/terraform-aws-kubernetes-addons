@@ -175,7 +175,7 @@ resource "helm_release" "ingress_nginx" {
   chart            = "ingress-nginx"
 
   values = [
-    file("${path.module}/ingress-nginx/values-custom.yaml")
+    var.enable_cert_manager ? file("${path.module}/ingress-nginx/values-custom-with-cert-manager.yaml") : file("${path.module}/ingress-nginx/values-custom.yaml")
   ]
 
   dynamic "set" {
