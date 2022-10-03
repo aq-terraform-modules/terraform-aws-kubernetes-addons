@@ -20,11 +20,8 @@ resource "helm_release" "argocd" {
       "server.ingress.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
       "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
       "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
-      "server.ingress.tls": "{secretName: argocd-cert, hosts: {argocd.acloudguru.anhquach.dev}}",
-      "server.ingressGrpc.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
-      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
-      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
-      "server.ingressGrpc.tls": "{secretName: argocd-cert, hosts: {argocd.acloudguru.anhquach.dev}}"
+      "server.ingress.tls[0].secretName": "argocd-cert",
+      "server.ingress.tls[0].host": "{argocd.acloudguru.anhquach.dev}"
     } : {}
 
     content {
