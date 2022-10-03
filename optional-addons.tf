@@ -51,7 +51,7 @@ resource "helm_release" "argocd" {
   ]
 }
 
-resource "helm_release" "argocd" {
+resource "helm_release" "argocd-apps" {
   count            = var.enable_argocd ? 1 : 0
   name             = "argocd-apps"
   namespace        = "argocd"
