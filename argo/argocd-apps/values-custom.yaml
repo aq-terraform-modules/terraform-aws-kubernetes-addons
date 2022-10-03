@@ -22,11 +22,9 @@ applications: # []
         prune: true
         selfHeal: true
     syncOptions:
-      - CreateNamespace=false
-      - Validate=false
-      - PruneLast=false
-      - RespectIgnoreDifferences=false
-      - ApplyOutOfSyncOnly=false
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - PrunePropagationPolicy=foreground
 # - name: guestbook
 #   namespace: argocd
 #   additionalLabels: {}
