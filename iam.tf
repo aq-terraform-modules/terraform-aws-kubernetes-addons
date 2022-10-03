@@ -190,8 +190,8 @@ resource "aws_iam_role" "vault" {
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
           StringEquals : {
-            "${var.oidc_provider}:aud": "sts.amazonaws.com",
-            "${var.oidc_provider}:sub": "system:serviceaccount:vault:vault"
+            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
+            "${var.oidc_provider}:sub" : "system:serviceaccount:vault:vault"
           }
         }
       }

@@ -942,7 +942,7 @@ grafana:
     pathType: Prefix
 
     hosts:
-      - chart-example.local
+      - grafana.acloudguru.anhquach.dev
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
     extraPaths: []
     # - path: /*
@@ -2978,7 +2978,7 @@ prometheus:
     ## Must be provided if Ingress is enabled.
     ##
     hosts:
-      - prometheus.domain.com
+      - prometheus.acloudguru.anhquach.dev
     # hosts: []
 
     ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix

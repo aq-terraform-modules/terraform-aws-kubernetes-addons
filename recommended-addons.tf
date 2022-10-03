@@ -15,7 +15,7 @@ resource "helm_release" "ingress_nginx" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_prometheus ? {"controller.metrics.enabled": "true"} : {}
+    for_each = var.enable_prometheus ? { "controller.metrics.enabled" : "true" } : {}
 
     content {
       name  = each_item.key
@@ -25,7 +25,7 @@ resource "helm_release" "ingress_nginx" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_linkerd ? {"controller.podAnnotations.linkerd\\.io/inject": "enabled"} : {}
+    for_each = var.enable_linkerd ? { "controller.podAnnotations.linkerd\\.io/inject" : "enabled" } : {}
 
     content {
       name  = each_item.key

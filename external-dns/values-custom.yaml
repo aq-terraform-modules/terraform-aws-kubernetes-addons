@@ -119,7 +119,7 @@ txtPrefix: ""
 txtSuffix: ""
 
 domainFilters: #[]
-  - dev-453422525221.pierre-cardin.info
+  - acloudguru.anhquach.dev
 
 provider: aws
 

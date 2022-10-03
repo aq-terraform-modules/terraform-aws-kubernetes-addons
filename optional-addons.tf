@@ -17,16 +17,16 @@ resource "helm_release" "argocd" {
   dynamic "set" {
     iterator = each_item
     for_each = var.enable_cert_manager ? {
-      "server.ingress.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
-      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
-      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
-      "server.ingress.tls[0].secretName": "argocd-cert",
-      "server.ingress.tls[0].hosts": "{argocd.acloudguru.anhquach.dev}",
-      "server.ingressGrpc.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
-      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
-      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
-      "server.ingressGrpc.tls[0].secretName": "argocd-cert",
-      "server.ingressGrpc.tls[0].hosts": "{argocd.acloudguru.anhquach.dev}"
+      "server.ingress.annotations.cert-manager\\.io/cluster-issuer" : "letsencrypt-prod",
+      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect" : "true",
+      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet" : "",
+      "server.ingress.tls[0].secretName" : "argocd-cert",
+      "server.ingress.tls[0].hosts" : "{argocd.acloudguru.anhquach.dev}",
+      "server.ingressGrpc.annotations.cert-manager\\.io/cluster-issuer" : "letsencrypt-prod",
+      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect" : "true",
+      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet" : "",
+      "server.ingressGrpc.tls[0].secretName" : "argocd-cert",
+      "server.ingressGrpc.tls[0].hosts" : "{argocd.acloudguru.anhquach.dev}"
     } : {}
 
     content {
@@ -68,7 +68,7 @@ resource "helm_release" "prometheus" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_linkerd ? {} : {"prometheus.prometheusSpec.additionalScrapeConfigs": "[]"}
+    for_each = var.enable_linkerd ? {} : { "prometheus.prometheusSpec.additionalScrapeConfigs" : "[]" }
 
     content {
       name  = each_item.key
@@ -238,7 +238,7 @@ resource "helm_release" "jenkins" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_prometheus ? {"controller.prometheus.enabled": "true"} : {}
+    for_each = var.enable_prometheus ? { "controller.prometheus.enabled" : "true" } : {}
 
     content {
       name  = each_item.key
@@ -330,7 +330,7 @@ resource "helm_release" "keda" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_prometheus ? {"prometheus.metricServer.enabled": "true", "prometheus.operator.enabled": "true"} : {}
+    for_each = var.enable_prometheus ? { "prometheus.metricServer.enabled" : "true", "prometheus.operator.enabled" : "true" } : {}
 
     content {
       name  = each_item.key
@@ -358,10 +358,10 @@ resource "helm_release" "keda" {
 ###########################################################
 
 resource "helm_release" "linkerd" {
-  count            = var.enable_linkerd && !var.enable_argocd ? 1 : 0
-  name             = "linkerd2"
-  repository       = "https://helm.linkerd.io/stable"
-  chart            = "linkerd2"
+  count      = var.enable_linkerd && !var.enable_argocd ? 1 : 0
+  name       = "linkerd2"
+  repository = "https://helm.linkerd.io/stable"
+  chart      = "linkerd2"
 
   values = [
     file("${path.module}/linkerd/values-custom.yaml")
@@ -383,10 +383,10 @@ resource "helm_release" "linkerd" {
 }
 
 resource "helm_release" "linkerd_viz" {
-  count            = var.enable_linkerd ? 1 : 0
-  name             = "linkerd-viz"
-  repository       = "https://helm.linkerd.io/stable"
-  chart            = "linkerd-viz"
+  count      = var.enable_linkerd ? 1 : 0
+  name       = "linkerd-viz"
+  repository = "https://helm.linkerd.io/stable"
+  chart      = "linkerd-viz"
 
   values = [
     file("${path.module}/linkerd/viz-values-custom.yaml")
@@ -441,7 +441,7 @@ resource "helm_release" "vault" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.enable_secret_csi ? {"csi.enabled": "true"} : {}
+    for_each = var.enable_secret_csi ? { "csi.enabled" : "true" } : {}
 
     content {
       name  = each_item.key
@@ -470,11 +470,11 @@ resource "helm_release" "vault" {
 # Secret CSI
 ###########################################################
 resource "helm_release" "secret_csi" {
-  count            = var.enable_secret_csi && !var.enable_argocd ? 1 : 0
-  name             = "secret-csi"
-  namespace        = "kube-system"
-  repository       = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
-  chart            = "secrets-store-csi-driver"
+  count      = var.enable_secret_csi && !var.enable_argocd ? 1 : 0
+  name       = "secret-csi"
+  namespace  = "kube-system"
+  repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+  chart      = "secrets-store-csi-driver"
 
   set {
     name  = "syncSecret.enabled"

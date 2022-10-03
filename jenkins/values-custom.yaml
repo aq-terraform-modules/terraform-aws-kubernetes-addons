@@ -460,8 +460,7 @@ controller:
     # Set this path to jenkinsUriPrefix above or use annotations to rewrite path
     # path: "/jenkins"
     # configures the hostname e.g. jenkins.example.com
-    # TODO: Change base on aws account
-    hostName: 
+    hostName: jenkins.acloudguru.anhquach.dev
     tls:
     # - secretName: jenkins.cluster.local
     #   hosts:
@@ -600,7 +599,7 @@ agent:
   defaultsProviderTemplate: ""
   # URL for connecting to the Jenkins contoller
   # TODO: Change base on aws account
-  jenkinsUrl: 
+  jenkinsUrl: "jenkins.acloudguru.anhquach.dev"
   # connect to the specified host and port, instead of connecting directly to the Jenkins controller
   jenkinsTunnel:
   kubernetesConnectTimeout: 5

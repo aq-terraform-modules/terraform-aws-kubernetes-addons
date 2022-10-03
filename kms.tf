@@ -8,11 +8,11 @@ module "kms_label" {
 }
 
 resource "aws_kms_key" "vault" {
-  count                   = var.enable_vault ? 1 : 0
-  description             = "AWS KMS Customer-managed key used for Vault auto-unseal and encryption"
-  enable_key_rotation     = false
-  is_enabled              = true
-  key_usage               = "ENCRYPT_DECRYPT"
+  count               = var.enable_vault ? 1 : 0
+  description         = "AWS KMS Customer-managed key used for Vault auto-unseal and encryption"
+  enable_key_rotation = false
+  is_enabled          = true
+  key_usage           = "ENCRYPT_DECRYPT"
 
   tags = merge(
     { Name = "${module.kms_label.id}-vault-key" },

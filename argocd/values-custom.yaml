@@ -1408,7 +1408,8 @@ server:
     ## Argo Ingress.
     ## Hostnames must be provided if Ingress is enabled.
     ## Secrets must be manually created in the namespace
-    hosts: 
+    hosts:
+      - argocd.acloudguru.anhquach.dev
 
     # -- List of ingress paths
     paths:
@@ -1478,7 +1479,8 @@ server:
     ## Hostnames must be provided if Ingress is enabled.
     ## Secrets must be manually created in the namespace
     ##
-    hosts: 
+    hosts:
+      - argocd.acloudguru.anhquach.dev
 
     # -- List of ingress paths for dedicated [gRPC-ingress]
     paths:
@@ -1534,7 +1536,7 @@ server:
   # @default -- See [values.yaml]
   config:
     # Argo CD's externally facing base URL (optional). Required when configuring SSO
-    url: ""
+    url: "https://argocd.acloudguru.anhquach.dev"
     # Argo CD instance label key
     application.instanceLabelKey: argocd.argoproj.io/instance
 
