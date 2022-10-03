@@ -205,7 +205,7 @@ configs:
     #     -----END OPENSSH PRIVATE KEY-----
     https-creds:
       url: https://github.com/aq-argocd
-      password: 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
+      password: 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
       username: anhqqt
     # ssh-creds:
     #  url: git@github.com:argoproj-labs
@@ -231,8 +231,8 @@ configs:
     #   type: helm
     #   password: my-password
     #   username: my-username
-    private-repo:
-      url: https://github.com/aq-argocd/bootstrap
+    # private-repo:
+    #   url: https://github.com/aq-argocd/bootstrap
 
   # -- Annotations to be added to `configs.repositories` Secret
   repositoriesAnnotations: {}
