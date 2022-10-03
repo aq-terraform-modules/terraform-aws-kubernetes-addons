@@ -1393,12 +1393,15 @@ server:
     enabled: true
     # -- Additional ingress annotations
     annotations: # {}
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/server-snippet: |
-        if ( $server_port = 80 ) {
-          return 301 https://$host$request_uri;
-        }
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      # nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      # nginx.ingress.kubernetes.io/server-snippet: |
+      #   if ( $server_port = 80 ) {
+      #     return 301 https://$host$request_uri;
+      #   }
     # -- Additional ingress labels
     labels: {}
     # -- Defines which ingress controller will implement the resource
@@ -1432,8 +1435,10 @@ server:
       #         name: use-annotation
 
     # -- Ingress TLS configuration
-    tls:
-      []
+    tls: # []
+      - secretName: argocd-cert
+        hosts:
+          - "argocd.acloudguru.anhquach.dev"
       # - secretName: argocd-tls-certificate
       #   hosts:
       #     - argocd.example.com
