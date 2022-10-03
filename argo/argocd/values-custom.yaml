@@ -339,9 +339,6 @@ configs:
     # -- Limit on number of concurrent manifests generate requests. Any value less the 1 means no limit.
     reposerver.parallelism.limit: 0
 
-    ## Kustomize with Helm
-    kustomize.buildOptions: --enable-helm
-
 # -- Array of extra K8s manifests to deploy
 extraObjects: []
   # - apiVersion: secrets-store.csi.x-k8s.io/v1
@@ -1539,6 +1536,9 @@ server:
   # -- [General Argo CD configuration]
   # @default -- See [values.yaml]
   config:
+    # Config for kustomize with Helm
+    kustomize.buildOptions: --enable-helm
+
     # Argo CD's externally facing base URL (optional). Required when configuring SSO
     url: "https://argocd.acloudguru.anhquach.dev"
     # Argo CD instance label key
