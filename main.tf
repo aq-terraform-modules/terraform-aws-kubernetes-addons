@@ -16,6 +16,25 @@ resource "helm_release" "argocd" {
 
   dynamic "set" {
     iterator = each_item
+    for_each = var.enable_cert_manager ? {
+      "server.ingress.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
+      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
+      "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
+      "server.ingress.tls": "{secretName: argocd-cert, hosts: {argocd.acloudguru.anhquach.dev}}",
+      "server.ingressGrpc.annotations.cert-manager\\.io/cluster-issuer": "letsencrypt-prod",
+      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect": "true",
+      "server.ingressGrpc.annotations.nginx\\.ingress\\.kubernetes\\.io/server-snippet": "",
+      "server.ingressGrpc.tls": "{secretName: argocd-cert, hosts: {argocd.acloudguru.anhquach.dev}}"
+    } : {}
+
+    content {
+      name  = each_item.key
+      value = each_item.value
+    }
+  }
+
+  dynamic "set" {
+    iterator = each_item
     for_each = try(var.argocd_context, {})
 
     content {

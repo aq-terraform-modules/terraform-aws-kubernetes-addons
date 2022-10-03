@@ -464,7 +464,6 @@ controller:
       service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
       service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-      # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:638747492136:certificate/635eca09-601a-440d-b5a8-d60d79d9597d"
     # clusterIP: ""
 
     # -- List of IP addresses at which the controller services are available
@@ -543,7 +542,6 @@ controller:
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-        # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:638747492136:certificate/635eca09-601a-440d-b5a8-d60d79d9597d"
 
       # loadBalancerIP: ""
 
