@@ -1,3 +1,9 @@
+variable "use_aws_nlb_ssl" {
+  description = "Use SSL terminatie at AWS NLB or not"
+  type = bool
+  default = false
+}
+
 variable "base_label_context" {
   description = "Base label context that will be used to create other resource"
   type        = any
