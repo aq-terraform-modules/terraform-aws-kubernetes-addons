@@ -55,7 +55,7 @@ resource "helm_release" "argocd" {
 # PROMETHEUS
 ###########################################################
 resource "helm_release" "prometheus" {
-  count            = var.enable_prometheus ? 1 : 0
+  count            = var.enable_prometheus && !var.enable_argocd ? 1 : 0
   name             = "prometheus"
   namespace        = "monitoring"
   create_namespace = true
@@ -91,7 +91,7 @@ resource "helm_release" "prometheus" {
 # SNAPSCHEDULER
 ###########################################################
 resource "helm_release" "snapscheduler" {
-  count            = var.enable_snapscheduler ? 1 : 0
+  count            = var.enable_snapscheduler && !var.enable_argocd ? 1 : 0
   name             = "snapscheduler"
   namespace        = "snapscheduler"
   create_namespace = true
@@ -111,7 +111,7 @@ resource "helm_release" "snapscheduler" {
 # EFS CSI Driver
 ###########################################################
 resource "helm_release" "efs_csi_driver" {
-  count            = var.enable_efs_csi_driver ? 1 : 0
+  count            = var.enable_efs_csi_driver && !var.enable_argocd ? 1 : 0
   name             = "aws-efs-csi-driver"
   namespace        = "kube-system"
   create_namespace = true
@@ -143,7 +143,7 @@ resource "helm_release" "efs_csi_driver" {
 }
 
 resource "kubectl_manifest" "efs_storageclass" {
-  count = var.enable_efs_csi_driver ? 1 : 0
+  count = var.enable_efs_csi_driver && !var.enable_argocd ? 1 : 0
   yaml_body = templatefile("${path.module}/efs-csi-driver/storageclass.yaml", {
     file_system_id = module.efs_csi.id
   })
@@ -312,7 +312,7 @@ resource "helm_release" "external_dns" {
 # JENKINS
 ###########################################################
 resource "kubectl_manifest" "jenkins_namespace" {
-  count     = var.enable_jenkins ? 1 : 0
+  count     = var.enable_jenkins && !var.enable_argocd ? 1 : 0
   yaml_body = <<YAML
 apiVersion: v1
 kind: Namespace
@@ -322,7 +322,7 @@ YAML
 }
 
 resource "kubectl_manifest" "jenkins_home_pvc" {
-  count     = var.enable_jenkins ? 1 : 0
+  count     = var.enable_jenkins && !var.enable_argocd ? 1 : 0
   yaml_body = file("${path.module}/jenkins/jenkins-home-pvc.yaml")
 
   depends_on = [
@@ -331,7 +331,7 @@ resource "kubectl_manifest" "jenkins_home_pvc" {
 }
 
 resource "kubectl_manifest" "jenkins_home_snap_daily" {
-  count     = var.enable_snapscheduler ? var.enable_jenkins ? 1 : 0 : 0
+  count     = var.enable_snapscheduler && var.enable_jenkins && !var.enable_argocd ? 1 : 0
   yaml_body = file("${path.module}/jenkins/snap-daily.yaml")
 
   depends_on = [
@@ -341,7 +341,7 @@ resource "kubectl_manifest" "jenkins_home_snap_daily" {
 }
 
 resource "helm_release" "jenkins" {
-  count            = var.enable_jenkins ? 1 : 0
+  count            = var.enable_jenkins && !var.enable_argocd ? 1 : 0
   name             = "jenkins"
   namespace        = "jenkins"
   create_namespace = true
@@ -384,7 +384,7 @@ resource "helm_release" "jenkins" {
 # VELERO
 ###########################################################
 resource "helm_release" "velero" {
-  count            = var.enable_velero ? 1 : 0
+  count            = var.enable_velero && !var.enable_argocd ? 1 : 0
   name             = "velero"
   namespace        = "velero"
   create_namespace = true
@@ -434,7 +434,7 @@ resource "helm_release" "velero" {
 # KEDA
 ###########################################################
 resource "helm_release" "keda" {
-  count            = var.enable_keda ? 1 : 0
+  count            = var.enable_keda && !var.enable_argocd ? 1 : 0
   name             = "keda"
   namespace        = "keda"
   create_namespace = true
@@ -475,7 +475,7 @@ resource "helm_release" "keda" {
 ###########################################################
 
 resource "helm_release" "linkerd" {
-  count            = var.enable_linkerd ? 1 : 0
+  count            = var.enable_linkerd && !var.enable_argocd ? 1 : 0
   name             = "linkerd2"
   repository       = "https://helm.linkerd.io/stable"
   chart            = "linkerd2"
@@ -529,7 +529,7 @@ resource "helm_release" "linkerd_viz" {
 # Vault
 ###########################################################
 resource "helm_release" "vault" {
-  count            = var.enable_vault ? 1 : 0
+  count            = var.enable_vault && !var.enable_argocd ? 1 : 0
   name             = "vault"
   namespace        = "vault"
   create_namespace = true
@@ -587,7 +587,7 @@ resource "helm_release" "vault" {
 # Secret CSI
 ###########################################################
 resource "helm_release" "secret_csi" {
-  count            = var.enable_secret_csi ? 1 : 0
+  count            = var.enable_secret_csi && !var.enable_argocd ? 1 : 0
   name             = "secret-csi"
   namespace        = "kube-system"
   repository       = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
