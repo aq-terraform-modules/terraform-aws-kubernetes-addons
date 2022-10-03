@@ -1596,6 +1596,7 @@ server:
       p, role:org-admin, clusters, *, *, allow
       p, role:org-admin, repositories, *, *, allow
       p, role:org-admin, projects, *, *, allow
+      p, role:org-admin, projects, *, *, allow
       g, "413c9ef1-a424-41a0-9a70-4c40e4befa6a", role:org-admin
     scopes: '[groups, email]'
     # policy.csv is a file containing user-defined RBAC policies and role definitions (optional).
