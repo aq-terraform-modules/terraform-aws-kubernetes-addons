@@ -11,7 +11,7 @@ resource "helm_release" "argocd" {
   version          = var.argocd_chart_version
 
   values = [
-    file("${path.module}/argocd/values-custom.yaml")
+    file("${path.module}/argo/argocd/values-custom.yaml")
   ]
 
   dynamic "set" {
@@ -48,6 +48,23 @@ resource "helm_release" "argocd" {
   depends_on = [
     helm_release.prometheus,
     helm_release.ingress_nginx,
+  ]
+}
+
+resource "helm_release" "argocd" {
+  count            = var.enable_argocd ? 1 : 0
+  name             = "argocd-apps"
+  namespace        = "argocd"
+  create_namespace = true
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argocd-apps"
+
+  values = [
+    file("${path.module}/argo/argocd-apps/values-custom.yaml")
+  ]
+
+  depends_on = [
+    helm_release.argocd,
   ]
 }
 
