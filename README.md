@@ -1,7 +1,24 @@
 # terraform-aws-kubernetes-addons
+## Supported Addons
+- [x] ArgoCD
+- [x] AWS Loadbalancer Controller
+- [x] Cert Manager
+- [x] EFS CSI Driver
+- [x] External DNS
+- [x] Flagger
+- [x] Ingress Nginx
+- [x] Jenkins
+- [x] Keda
+- [x] Linkerd
+- [x] Metrics Server
+- [x] Prometheus - Grafana
+- [ ] Loki
+- [x] Snapscheduler
+- [x] Vault
+- [x] Velero
 ## Example usage
 ### main.tf
-```yaml
+```hcl
 module "kubernetes_addons" {
   source = "git@github.com:aq-terraform-modules/terraform-aws-kubernetes-addons.git?ref=master"
 
@@ -52,7 +69,7 @@ module "kubernetes_addons" {
 ```
 
 ### terraform.tfvars
-```yaml
+```hcl
 #####################
 #### EKS ADDONS #####
 #####################
