@@ -1391,7 +1391,7 @@ server:
 
   ingress:
     # -- Enable an ingress resource for the Argo CD server
-    enabled: false
+    enabled: true
     # -- Additional ingress annotations
     annotations: # {}
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -1447,7 +1447,7 @@ server:
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ingressGrpc:
     # -- Enable an ingress resource for the Argo CD server for dedicated [gRPC-ingress]
-    enabled: false
+    enabled: true
     # -- Setup up gRPC ingress to work with an AWS ALB
     isAWSALB: false
     # -- Additional ingress annotations for dedicated [gRPC-ingress]
